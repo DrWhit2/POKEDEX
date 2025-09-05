@@ -6,13 +6,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Pokémon Box</title>
 <style>
-/* ===== Fonts ===== */
+
 @font-face{font-family:'NeoDunggeunmo';src:url('./NeoDunggeunmoPro-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:'Galmuri11';src:url('./Galmuri11.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:'Galmuri11-Bold';src:url('./Galmuri11-Bold.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap}
 @font-face{font-family:'Galmuri11-Condensed';src:url('./Galmuri11-Condensed.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
 
-/* ===== Theme ===== */
+
 :root{
   --font-body:'NeoDunggeunmo', ui-monospace, "Courier New", monospace;
   --font-ui:'Galmuri11', var(--font-body);
@@ -34,7 +34,7 @@ body::before{ content:none !important; }
 
 .wrap{position:relative;z-index:1;max-width:var(--w);margin:0 auto;padding:16px;display:grid;grid-template-rows:auto 1fr;gap:var(--gap)}
 
-/* ===== Header ===== */
+  
 header{position:sticky;top:0;z-index:5;background:linear-gradient(#21080b,#160508);border:1px solid var(--red-border);padding:10px 12px;box-shadow:inset 0 0 0 2px #000}
 header .title{display:flex;align-items:center;gap:12px;letter-spacing:1px}
 header h1{margin:0;font-size:18px;color:#fff;text-transform:none;font-family:var(--font-ui-bold)}
@@ -45,11 +45,11 @@ header h1{margin:0;font-size:18px;color:#fff;text-transform:none;font-family:var
   transform:translate(-50%,-50%)}
 .ball.mini{width:12px;height:12px}.ball.mini::after{width:4px;height:4px}
 
-/* Layout */
+
 .layout{display:grid;grid-template-columns:1fr;column-gap:var(--gap);row-gap:0}
 @media(min-width:860px){.layout{grid-template-columns:1fr 460px}}
 
-/* Left list */
+
 .dex{background:var(--panel);border:1px solid var(--line);padding:var(--gap);position:relative;overflow:hidden}
 .group{color:var(--mut);font-size:12px;margin:4px 0 8px;display:flex;align-items:center;gap:8px;font-family:var(--font-ui)}
 .group::before,.group::after{content:'';height:1px;background:var(--line);flex:1}
@@ -98,7 +98,7 @@ header h1{margin:0;font-size:18px;color:#fff;text-transform:none;font-family:var
 .type.t-fairy{background:#D685AD;color:#111;border-color:#b46c8f}
 .type.t-unknown{background:#555;color:#eee;border-color:#444}
 
-/* Right detail */
+
 .details{
   background:var(--panel);border:1px solid var(--line);
   display:grid;grid-template-rows:auto auto 1fr auto;gap:6px;
@@ -112,7 +112,7 @@ header h1{margin:0;font-size:18px;color:#fff;text-transform:none;font-family:var
 .tab-btn[aria-selected="true"]{background:#24060a;outline:1px solid var(--red);outline-offset:-1px;box-shadow:0 0 18px rgba(255,47,62,.35)}
 .tab-btn:disabled{opacity:.45;pointer-events:none}
 
-/* 내부 하이라이트(회색 빔) */
+
 .screen{border:1px solid var(--line);background:#07090c;padding:12px 14px;min-height:300px;display:grid;gap:10px;grid-template-rows:auto 1fr;position:relative;overflow:hidden}
 .screen::after{content:"";position:absolute;inset:-40% -10%;background:linear-gradient(90deg,transparent,rgba(220,220,220,.08),transparent);transform:translateX(-100%) rotate(8deg);animation:sweep 6s linear infinite;pointer-events:none}
 @keyframes sweep{to{transform:translateX(100%) rotate(8deg)}}
@@ -127,12 +127,12 @@ header h1{margin:0;font-size:18px;color:#fff;text-transform:none;font-family:var
 .kv .k{color:#9aa0a6;font-size:13px;text-align:left;padding-left:6px;font-family:var(--font-ui)}
 .kv .v{color:#e9ecef;font-size:13px;word-break:keep-all;overflow-wrap:break-word}
 
-/* 메모 박스 */
+
 .extra-box{position:relative;border:1px solid var(--line);background:#090a0d;min-height:140px;overflow:auto;}
 .extra-box::before,.extra-box::after{display:none!important}
 .extra-box .placeholder{color:#cfd3d7;font-size:13px;padding:10px}
 
-/* HUD (scanner) */
+
 .hudx-wrap{margin-top:6px}
 .hudx-panel{--hudx-h:130px;position:relative;height:var(--hudx-h);
   border:1px solid rgba(255,47,62,.35);background:linear-gradient(180deg,#090a0c,#050607);
@@ -148,7 +148,7 @@ header h1{margin:0;font-size:18px;color:#fff;text-transform:none;font-family:var
 button{-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
 
-/* ===== Splash(4s) ===== */
+  
 #splash{
   position:fixed; inset:0; z-index:9999; background:#000;
   display:grid; place-items:center; font-family:var(--font-ui);  /* 폰트 적용 */
@@ -168,7 +168,7 @@ button{-webkit-tap-highlight-color:transparent}
 </head>
 <body>
 
-<!-- ===== Splash overlay (4초) ===== -->
+
 <section id="splash" aria-hidden="true">
   <div class="sp-frame">
     <div class="sp-brand">WHITE BOX</div>
@@ -189,7 +189,7 @@ button{-webkit-tap-highlight-color:transparent}
   </header>
 
   <main class="layout" id="app" aria-live="polite">
-    <!-- Left -->
+ 
     <section class="dex" aria-label="포켓몬 목록">
       <h3 class="group">보유 포켓몬</h3>
       <div class="grid" id="grid-owned" role="list"></div>
@@ -197,14 +197,14 @@ button{-webkit-tap-highlight-color:transparent}
       <div class="grid" id="grid-wish" role="list"></div>
     </section>
 
-    <!-- Right -->
+
     <aside class="details" aria-label="상세 정보">
       <div class="tabs" role="tablist" aria-label="상세 탭">
         <button class="tab-btn" id="tab-info" role="tab" aria-selected="true" aria-controls="panel-info"><span class="ball mini" aria-hidden="true"></span><span>도감설명</span></button>
         <button class="tab-btn" id="tab-data" role="tab" aria-selected="false" aria-controls="panel-data"><span class="ball mini" aria-hidden="true"></span><span>데이터</span></button>
       </div>
 
-      <!-- 도감설명 -->
+
       <div class="screen" id="panel-info" role="tabpanel" aria-labelledby="tab-info">
         <div class="big">
           <div class="sprite" id="info-sprite" title="클릭: 울음소리 재생">—</div>
@@ -221,7 +221,7 @@ button{-webkit-tap-highlight-color:transparent}
         <div class="extra-box" id="info-extra"><div class="placeholder">포켓몬을 선택해주세요.</div></div>
       </div>
 
-      <!-- 데이터 -->
+
       <div class="screen" id="panel-data" role="tabpanel" aria-labelledby="tab-data" hidden>
         <div class="big">
           <div class="sprite" id="data-sprite" title="클릭: 울음소리 재생">DATA</div>
@@ -238,7 +238,7 @@ button{-webkit-tap-highlight-color:transparent}
         <div class="extra-box" id="data-extra"><div class="placeholder">메모를 표시합니다.</div></div>
       </div>
 
-      <!-- HUD (scanner) -->
+
       <div class="hudx-wrap">
         <div class="hudx-panel">
           <canvas id="hudx-cv"></canvas>
@@ -252,17 +252,17 @@ button{-webkit-tap-highlight-color:transparent}
   </main>
 </div>
 
-<!-- 울음소리 오디오 -->
+  
 <audio id="cry-audio" preload="none"></audio>
 
 <script>
-/* ====== 오디오 볼륨 (전역) ====== */
-const CRY_VOLUME = 0.35;  // ← 여기 숫자만 바꿔 전체 볼륨 조절
 
-/* ==== 외부 스프라이트/아트 소스 ==== */
+const CRY_VOLUME = 0.35;  
+
+
 const SPR = 'https://play.pokemonshowdown.com/sprites/gen5/';
 const OA  = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
-/* ==== 울음소리 소스 ==== */
+
 const CRY_BASE = 'https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/';
 function playCryById(id){
   const a=document.getElementById('cry-audio');
@@ -272,7 +272,7 @@ function playCryById(id){
   a.play().catch(()=>{});
 }
 
-/* ===== 데이터 ===== */
+
 const owned = [
   { id:570, name:'조로아', types:['노말','고스트'], sprite: SPR+'zorua-hisui.png',
     desc:'사람이나 다른 포켓몬을 모방한다.',
@@ -352,13 +352,13 @@ const wish = [
 function getAll(){ return [...owned, ...wish]; }
 const isWishId = (id) => wish.some(w => w.id === id);
 
-/* 타입 → CSS 슬러그 */
+
 function tSlug(t){
   const m={'노말':'normal','불꽃':'fire','물':'water','전기':'electric','풀':'grass','얼음':'ice','격투':'fighting','독':'poison','땅':'ground','비행':'flying','에스퍼':'psychic','벌레':'bug','바위':'rock','고스트':'ghost','드래곤':'dragon','악':'dark','강철':'steel','페어리':'fairy','???':'unknown'};
   return m[t]||'unknown';
 }
 
-/* DOM refs */
+
 const gridOwned=document.getElementById('grid-owned');
 const gridWish=document.getElementById('grid-wish');
 const tabInfo=document.getElementById('tab-info');
@@ -368,7 +368,7 @@ const panelData=document.getElementById('panel-data');
 
 let selectedId=null;
 
-/* 공용: 이미지 엘리먼트 생성 */
+
 function makeSpriteImg(src, alt){
   const img=new Image();
   img.src=src; img.alt=alt;
@@ -379,7 +379,7 @@ function makeSpriteImg(src, alt){
   return img;
 }
 
-/* 카드 렌더 (카드 클릭 시 울음소리) */
+
 function renderGrid(container, arr, isWish=false){
   container.innerHTML='';
   arr.forEach(m=>{
@@ -402,11 +402,11 @@ function renderGrid(container, arr, isWish=false){
 }
 function renderAll(){ renderGrid(gridOwned, owned, false); renderGrid(gridWish, wish, true); }
 
-/* 탭 */
+
 function setTab(which){ const on=which==='info'; tabInfo.setAttribute('aria-selected',String(on)); tabData.setAttribute('aria-selected',String(!on)); panelInfo.hidden=!on; panelData.hidden=on; }
 tabInfo.addEventListener('click',()=>setTab('info')); tabData.addEventListener('click',()=>setTab('data'));
 
-/* 상세 */
+
 function selectMon(id){
   selectedId=id; renderAll();
   const m=getAll().find(x=>x.id===id); if(!m) return;
@@ -441,10 +441,10 @@ function renderData(m){
   $('data-extra').innerHTML = `<div class="placeholder">${m.dmem?m.dmem:'메모/추가 데이터를 적을 공간'}</div>`;
 }
 
-/* 초기 렌더 */
+
 renderAll();
 
-/* ===== 4초 스플래시 ===== */
+
 (function(){
   const el=document.getElementById('splash'); if(!el) return;
   const bar=document.getElementById('sp-bar');
@@ -464,7 +464,7 @@ renderAll();
 })();
 </script>
 
-<!-- ===== Cyber Scanner HUD ===== -->
+
 <script>
 (function(){
   const cv=document.getElementById('hudx-cv'); if(!cv) return;
@@ -473,7 +473,7 @@ renderAll();
   const nameEl=document.getElementById('hudx-name');
   const typesEl=document.getElementById('hudx-types');
 
-  /* seeded RNG */
+ 
   let SEED=1; function mulberry32(a){return function(){a|=0;a=(a+0x6D2B79F5)|0;let t=Math.imul(a^(a>>>15),1|a);t^=t+Math.imul(t^(t>>>7),61|t);return((t^(t>>>14))>>>0)/4294967296;};}
   let rnd=mulberry32(SEED);
   function reseedFrom(mon){

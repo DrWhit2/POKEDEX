@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>WHITE BOX – Pokémon Box / Research Data</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* strict black background, red accents for text/lines */
+    --bg:#000000;           /* PURE BLACK */
+    --fg:#F25555;           /* brighter red for text/lines */
+    --fg-dim:#E08A8A;       /* secondary red for subdued text */
+    --panel:#000000;        /* panels also pure black */
+    --line:rgba(242,85,85,.22);
+    --glow:0 0 8px rgba(242,85,85,.26), 0 0 18px rgba(242,85,85,.12);
+
+    --radius:14px;
+    --w:920px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);}
+  body{font-family:"VT323", system-ui, -apple-system, Segoe UI, Roboto; letter-spacing:.6px}
+  a{color:inherit}
+
+  /* ===== CRT wrapper (neutral scanlines; no red tint on background) ===== */
+  .crt{position:relative; min-height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden}
+  .crt::before{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0 2px, transparent 2px 4px);
+    mix-blend-mode:screen; animation:scan 7s linear infinite;
+  }
+  .crt::after{
+    content:""; position:absolute; inset:-2px; pointer-events:none; border-radius:20px;
+    background:radial-gradient(circle at 50% 50%, transparent 60%, rgba(0,0,0,.55) 100%);
+    /* no red glow on the background */
+    box-shadow:inset 0 0 80px rgba(0,0,0,.35);
+  }
+  @keyframes scan{0%{opacity:.45}50%{opacity:.6}100%{opacity:.45}}
+
+  /* ===== Frame ===== */
+  .frame{
+    width:var(--w); max-width:96vw; border:2px solid var(--fg); border-radius:var(--radius);
+    padding:18px; background:linear-gradient(#000,#000);      /* PURE BLACK */
+    box-shadow:0 0 22px rgba(0,0,0,.5), inset 0 0 20px rgba(0,0,0,.35); /* neutral shadows */
+  }
+  .brand{
+    text-align:center; letter-spacing:3px; font-family:"Press Start 2P", system-ui;
+    font-size:32px; text-shadow:var(--glow);                   /* red glow only on text */
+  }
+  .sub{ text-align:center; color:var(--fg-dim); font-size:14px; margin-top:6px; }
+
+  /* ===== HUD ===== */
+  .hud{
+    display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+    margin:14px 0; padding:8px 10px; border:2px solid var(--fg); border-radius:10px;
+    background:linear-gradient(180deg,#0b0b0b 0,#000 100%);     /* still black */
+    box-shadow:inset 0 0 0 1px var(--line);
+  }
+  .k{ color:var(--fg-dim); font-size:14px }
+  .blink{ animation:blink 1s steps(1,end) infinite }
+  @keyframes blink{50%{opacity:.2}}
+
+  /* ===== Loading Panel ===== */
+  .panel{
+    border:2px solid var(--fg); border-radius:12px; background:var(--panel); padding:16px;
+    box-shadow:inset 0 0 0 1px var(--line);
+  }
+  .loading{ display:grid; gap:14px; }
+
+  .meter{ height:16px; border:2px solid var(--fg); border-radius:10px; overflow:hidden; }
+  .meter > i{
+    display:block; height:100%; width:12%;
+    background:linear-gradient(90deg,#E04B4B,#F25555);          /* red bar */
+    box-shadow:0 0 12px rgba(242,85,85,.30);
+    animation:load 7s ease-in-out infinite;
+  }
+  @keyframes load{ 0%{width:8%} 45%{width:96%} 50%{width:90%} 100%{width:8%} }
+
+  .big{ font-size:48px; text-align:center; text-shadow:var(--glow); letter-spacing:2px; }
+  .pct{ font-size:18px; text-align:center; color:var(--fg-dim) }
+
+  .console{
+    font-size:16px; background:#000;                            /* pure black console */
+    border:1px dashed rgba(242,85,85,.38); border-radius:10px;
+    padding:12px; min-height:84px
+  }
+  .line{ display:block; white-space:pre; }
+  .cursor{ display:inline-block; width:10px; height:16px; background:var(--fg); margin-left:4px; vertical-align:-2px; animation:blink 1s steps(1,end) infinite }
+
+  /* ===== Footer ===== */
+  .foot{
+    margin-top:14px; display:flex; justify-content:space-between; align-items:center; gap:10px;
+    padding:10px; border:2px solid var(--fg); border-radius:10px; box-shadow:inset 0 0 0 1px var(--line)
+  }
+
+  @media (max-width:720px){ .brand{font-size:26px} .big{font-size:40px} }
+</style>
+</head>
+<body>
+<div class="crt">
+  <main class="frame" role="application" aria-label="WHITE BOX – Pokémon Box Research Data Archive">
+    <div class="brand">WHITE BOX</div>
+    <div class="sub">POKÉMON BOX – RESEARCH DATA ARCHIVE</div>
+
+    <section class="hud" aria-label="Session status">
+      <div class="k">PROJECT: POKÉMON BOX</div>
+      <div class="k">RESEARCHER: WHITE</div>
+      <div class="k">ARCHIVE STATUS: ONLINE<span class="blink">_</span></div>
+    </section>
+
+    <section class="panel loading" aria-live="polite" aria-busy="true">
+      <div class="big" id="stage">INITIALIZING</div>
+      <div class="pct" id="percent">12%</div>
+      <div class="meter" aria-hidden="true"><i id="bar"></i></div>
+
+      <div class="console" aria-label="Activity log">
+        <span class="line" id="log1">&gt; Opening Pokémon Box…</span>
+        <span class="line" id="log2">&gt; Decrypting research data…</span>
+        <span class="line" id="log3">&gt; Waiting<span class="cursor"></span></span>
+      </div>
+    </section>
+
+    <section class="foot">
+      <div>PROJECT: POKÉMON BOX</div>
+      <div>OWNER: WHITE</div>
+      <div>MODE: READ-ONLY • ENCRYPTION: AES-256</div>
+    </section>
+  </main>
+</div>
+
+<script>
+const stages = [
+  "INITIALIZING","AUTHENTICATING","OPENING POKÉMON BOX","DECRYPTING RESEARCH DATA",
+  "INDEXING SPECIMEN FILES","VALIDATING STORAGE","COMPILING ARCHIVE MANIFEST","FINALIZING"
+];
+const logs = [
+  "Opening Pokémon Box…","Scanning storage crates…","Decrypting research data…",
+  "Indexing specimen files…","Syncing field notes…","Rebuilding archive index…",
+  "Consolidating metadata…","Tagging owner: WHITE…"
+];
+
+const stageEl=document.getElementById('stage');
+const pctEl=document.getElementById('percent');
+const barEl=document.getElementById('bar');
+const logEls=[document.getElementById('log1'),document.getElementById('log2'),document.getElementById('log3')];
+
+let pct=7, dir=1, step=0;
+function tick(){
+  pct += dir * (Math.random()*9 + 1);
+  if(pct>=98){dir=-1; pct=98; step=(step+1)%stages.length; stageEl.textContent=stages[step]; rotateLogs();}
+  if(pct<=8){dir=1; pct=8; rotateLogs();}
+  pctEl.textContent=Math.round(pct)+"%";
+  barEl.style.width=Math.round(pct)+"%";
+}
+function rotateLogs(){
+  const next=logs[Math.floor(Math.random()*logs.length)];
+  logEls[0].textContent=logEls[1].textContent;
+  logEls[1].textContent=logEls[2].textContent.replace(/\s*▮?$/,'');
+  logEls[2].innerHTML='&gt; '+next+' <span class="cursor"></span>';
+}
+setInterval(tick,500);
+stageEl.textContent=stages[0];
+</script>
+</body>
+</html>

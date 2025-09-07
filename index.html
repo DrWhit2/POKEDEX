@@ -9,36 +9,66 @@
   @font-face {
     font-family: 'NeoDunggeunmo';
     src: url('./NeoDunggeunmoPro-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
+    font-weight: 400; font-style: normal; font-display: swap;
   }
   :root{
     --font:'NeoDunggeunmo', ui-monospace, monospace;
     --bg:#000; --txt:#e9ecef; --mut:#9aa0a6;
     --panel:#0a0b0d; --panel2:#0f1013; --line:#2a2d33;
-    --red:#ff2f3e; --red2:#3a0a0f;
-    --maxw:1000px;
+    --red:#ff2f3e; --red2:#3a0a0f; --maxw:1000px;
   }
-  *{box-sizing:border-box}
-  html,body{height:100%}
+  *{box-sizing:border-box} html,body{height:100%}
   body{margin:0;background:var(--bg);color:var(--txt);font-family:var(--font);line-height:1.6;font-size:14px}
 
-  /* Splash */
-  #splash{position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center}
-  .splash-box{width:min(880px,95vw);background:#0a0b0d;border:2px solid #F25555;border-radius:14px;padding:24px;text-align:center;color:#e9ecef;box-shadow:0 0 20px rgba(255,60,60,.3),inset 0 0 12px #000}
-  .splash-title{font-size:22px;color:#F25555;margin:0 0 6px;animation:glowPulse 2.6s ease-in-out infinite}
-  .splash-sub{font-size:12px;color:#E08A8A;margin:0 0 16px;animation:softBlink 7s steps(30,end) infinite}
-  .splash-meter{height:14px;border:2px solid #F25555;border-radius:10px;overflow:hidden;margin-bottom:12px}
-  .splash-meter>i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#F25555,#ff9a9a);transition:width 0.2s linear}
-  .splash-pct{font-size:13px;color:#ffdcdc;margin-bottom:8px;animation:softBlink 9s steps(36,end) infinite}
-  .splash-log{font-size:12px;color:#9aa0a6;text-align:left;white-space:pre-line;border:1px dashed rgba(242,85,85,.4);border-radius:10px;padding:8px;min-height:60px;background:#07080a;animation:crtFlicker 4.5s steps(40,end) infinite;position:relative}
-  .splash-log::after{content:"▎";margin-left:6px;color:#ffdcdc;animation:softBlink 1.2s steps(2,end) infinite}
+  /* === SPLASH (로딩창: 디자인/문구 1:1) === */
+  #splash{
+    position:fixed; inset:0; z-index:9999; background:#000;
+    display:grid; place-items:center; font-family:var(--font);
+  }
+  .sp-frame{
+    width:min(920px,96vw);
+    border:2px solid #F25555; border-radius:14px; padding:18px; background:#000;
+    box-shadow:0 0 22px rgba(0,0,0,.5), inset 0 0 20px rgba(0,0,0,.35);
+  }
+  .sp-brand{
+    font-size:26px; color:#F25555; text-align:center;
+    text-shadow:0 0 8px rgba(242,85,85,.45), 0 0 14px rgba(255,210,210,.25);
+  }
+  .sp-sub{
+    color:#E08A8A; text-align:center; margin:4px 0 10px;
+    animation:softBlink 7s steps(30,end) infinite;
+    font-size:13px;
+  }
+  .sp-hud{
+    display:flex; gap:12px; justify-content:space-between; flex-wrap:wrap;
+    border:2px solid #F25555; border-radius:10px; padding:8px 10px; margin:8px 0 12px;
+    color:#ffdcdc; font-size:12px;
+  }
+  .sp-panel{ border:2px solid #F25555; border-radius:12px; padding:14px; }
+  .sp-stage{ font-size:24px; text-align:center; color:#F25555; }
+  .sp-pct{ color:#E08A8A; text-align:center; margin-bottom:6px; font-size:13px;}
+  .sp-meter{ height:14px; border:2px solid #F25555; border-radius:10px; overflow:hidden; }
+  .sp-meter>i{ display:block; height:100%; width:0%; background:linear-gradient(90deg,#E04B4B,#F25555); }
+  .sp-log{
+    font-size:13px; background:#000; border:1px dashed rgba(242,85,85,.35);
+    border-radius:10px; padding:10px; min-height:70px; color:#ffdcdc;
+    animation:crtFlicker 4.5s steps(40,end) infinite;
+  }
+  .sp-log::after{ content:"▎"; margin-left:6px; color:#ffdcdc; animation:softBlink 1.2s steps(2,end) infinite; }
 
-  @keyframes glowPulse{0%{text-shadow:0 0 0 rgba(242,85,85,0)}50%{text-shadow:0 0 8px rgba(242,85,85,.45),0 0 14px rgba(255,210,210,.25)}100%{text-shadow:0 0 0 rgba(242,85,85,0)}}
-  @keyframes softBlink{0%,92%,100%{opacity:1;filter:brightness(1)}94%{opacity:.92;filter:brightness(.98)}96%{opacity:.85;filter:brightness(.96)}98%{opacity:.95;filter:brightness(.99)}}
-  @keyframes crtFlicker{0%{opacity:.96;filter:saturate(1)}50%{opacity:.93;filter:saturate(1.03)}100%{opacity:.96;filter:saturate(1)}}
+  @keyframes softBlink{
+    0%,92%,100%{opacity:1;filter:brightness(1)}
+    94%{opacity:.92;filter:brightness(.98)}
+    96%{opacity:.85;filter:brightness(.96)}
+    98%{opacity:.95;filter:brightness(.99)}
+  }
+  @keyframes crtFlicker{
+    0%{opacity:.96;filter:saturate(1)}
+    50%{opacity:.93;filter:saturate(1.03)}
+    100%{opacity:.96;filter:saturate(1)}
+  }
 
+  /* ===== 기본 UI ===== */
   header{position:sticky;top:0;z-index:10;background:linear-gradient(#19080b,#120508);border-bottom:1px solid var(--red2);padding:8px 12px;box-shadow:inset 0 -2px 0 0 #000}
   .top{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
   h1{margin:0;color:#fff;font-size:16px}
@@ -60,6 +90,7 @@
 
   .grid-s{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
   @media(max-width:860px){.grid-s{grid-template-columns:1fr}}
+  .card{border:1px solid var(--line);border-radius:12px;background:#0b0d12;padding:12px}
   .dialog{position:relative;padding:12px 14px 14px;background:linear-gradient(180deg,#101217,#0b0d12);border:2px solid #e9ecef;border-radius:0;box-shadow:inset 0 0 0 2px #000,0 0 0 2px #000;font-size:14px}
   .dialog[data-speaker]::before{content:attr(data-speaker);position:absolute;top:-12px;left:12px;font-size:11px;color:#000;background:#e9ecef;border:2px solid #000;border-radius:6px;padding:0 6px;line-height:16px;height:16px}
   .dialog .tri{position:absolute;right:10px;bottom:8px;font-size:14px;line-height:1;color:#ff2f3e}
@@ -75,6 +106,7 @@
   .chipset{display:flex;gap:6px 8px;flex-wrap:wrap}
   .type{font-size:10px;padding:0 6px;line-height:1.3;border:1px solid #303643;background:#0c0e12;color:#eaeaea;border-radius:999px}
   .t-normal{background:#A8A77A;color:#111;border-color:#8a8b5f}.t-ghost{background:#735797;color:#fff;border-color:#5c467a}
+
   .grid-e{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   @media(max-width:860px){.grid-e{grid-template-columns:1fr}}
   </style>
@@ -82,12 +114,20 @@
 <body>
 <!-- Splash -->
 <section id="splash" aria-hidden="true">
-  <div class="splash-box">
-    <div class="splash-title">WHITE RESEARCH LAB</div>
-    <div class="splash-sub">POKÉMON BOX POKEDEX — Data Archive &amp; Field Notes</div>
-    <div class="splash-meter"><i id="splash-bar"></i></div>
-    <div class="splash-pct" id="splash-pct">0%</div>
-    <div class="splash-log" id="splash-log">&gt; Booting system…</div>
+  <div class="sp-frame">
+    <div class="sp-brand">WHITE BOX</div>
+    <div class="sp-sub">POKÉMON BOX – RESEARCH DATA ARCHIVE</div>
+    <div class="sp-hud">
+      <div>PROJECT: POKÉMON BOX</div>
+      <div>RESEARCHER: WHITE</div>
+      <div>STATUS: ONLINE</div>
+    </div>
+    <div class="sp-panel">
+      <div class="sp-stage" id="sp-stage">INITIALIZING</div>
+      <div class="sp-pct" id="sp-pct">0%</div>
+      <div class="sp-meter"><i id="sp-bar"></i></div>
+      <div class="sp-log" id="sp-log">&gt; Opening Pokémon Box…</div>
+    </div>
   </div>
 </section>
 
@@ -173,20 +213,39 @@
   </section>
 </main>
 
+<!-- 로딩 스크립트 (게이지 + 문구 동일/글씨 은은 깜빡임) -->
 <script>
 (function(){
-  const el=document.getElementById('splash');
-  const bar=document.getElementById('splash-bar');
-  const pct=document.getElementById('splash-pct');
-  const log=document.getElementById('splash-log');
-  const STAGES=["INITIALIZING MODULES...","LOADING SPECIMEN DATA...","ACCESSING POKÉMON BOX...","DECRYPTING ARCHIVES...","SYNCHRONIZING FIELD NOTES...","FINALIZING...","READY"];
-  const LOGS=["> Booting system..."," > Scanning crates..."," > Decrypting specimens..."," > Indexing sprites..."," > Syncing field notes..."," > Done."];
-  let stageIndex=0; const D=3800; const start=performance.now();
+  const el=document.getElementById('splash'); if(!el) return;
+  const bar=document.getElementById('sp-bar');
+  const pct=document.getElementById('sp-pct');
+  const stage=document.getElementById('sp-stage');
+  const log=document.getElementById('sp-log');
+
+  const STAGES=[
+    "INITIALIZING","AUTHENTICATING","OPENING POKÉMON BOX",
+    "DECRYPTING","INDEXING","VALIDATING","COMPILING","FINALIZING","READY"
+  ];
+  const LOGS=[
+    "> Opening Pokémon Box…",
+    "> Scanning crates…",
+    "> Decrypting research data…",
+    "> Indexing specimen files…",
+    "> Syncing field notes…",
+    "> Consolidating metadata…"
+  ];
+
+  const D=4000; // 총 로딩 시간 (ms)
+  const start=performance.now();
   (function step(t){
-    const p=Math.min(1,(t-start)/D), n=Math.round(p*100);
-    bar.style.width=n+"%"; pct.textContent=n+"%";
-    if(n>=((stageIndex+1)*(100/STAGES.length))){ log.textContent=STAGES[stageIndex]||STAGES.at(-1); stageIndex++; }
-    if(p<1){ requestAnimationFrame(step);} else{ el.remove(); }
+    const p=Math.min(1,(t-start)/D);
+    const n=Math.round(p*100);
+    bar.style.width=n+"%";
+    pct.textContent=n+"%";
+    stage.textContent=STAGES[Math.min(STAGES.length-1, Math.floor(p*(STAGES.length)))];
+    if(n%13===0) log.textContent = LOGS[Math.floor(Math.random()*LOGS.length)];
+    if(p<1) requestAnimationFrame(step);
+    else el.remove();
   })(performance.now());
 })();
 </script>

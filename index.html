@@ -6,14 +6,14 @@
   <title>WHITE BOX — Story</title>
   <link rel="icon" type="image/png" href="pp.png">
   <style>
-  /* === Font === */
+  /* ===== Font ===== */
   @font-face{
     font-family:'NeoDunggeunmo';
     src:url('./NeoDunggeunmoPro-Regular.ttf') format('truetype');
     font-weight:400;font-style:normal;font-display:swap;
   }
 
-  /* === Theme === */
+  /* ===== Theme ===== */
   :root{
     --font:'NeoDunggeunmo', ui-monospace, "Courier New", monospace;
     --bg:#000; --txt:#e9ecef; --mut:#9aa0a6;
@@ -22,64 +22,29 @@
     --maxw:1000px; --gap:16px; --radius:14px;
   }
   *{box-sizing:border-box} html,body{height:100%}
-  body{
-    margin:0; font-family:var(--font); background:var(--bg); color:var(--txt);
-    line-height:1.6; font-size:14px;
-  }
+  body{margin:0;font-family:var(--font);background:var(--bg);color:var(--txt);line-height:1.6;font-size:14px}
 
-  /* === Splash (강화 버전) === */
-  #splash{position:fixed; inset:0; z-index:9999; background:#000; display:grid; place-items:center; overflow:hidden}
-  #splash::before{/* 비네트 + 그레인 */
-    content:""; position:absolute; inset:0;
-    background:
-      radial-gradient(80% 80% at 50% 50%, transparent 60%, rgba(0,0,0,.6) 100%),
-      repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0 1px, transparent 1px 3px);
-    pointer-events:none;
-  }
-  .sp-frame{
-    width:min(940px,96vw); position:relative; padding:18px;
-    background:#070709; border-radius:16px;
-    box-shadow:
-      0 0 30px rgba(255,70,70,.15),
-      inset 0 0 0 2px #000;
-    border:2px solid rgba(242,85,85,.65);
-  }
-  .sp-frame::after{/* 네온 외곽 라인 애니메이션 */
-    content:""; position:absolute; inset:-2px;
-    border-radius:16px;
-    background:conic-gradient(from 0deg,#F25555,transparent 35% 65%,#F25555);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor; mask-composite: exclude;
-    padding:2px; animation:borderSpin 3.6s linear infinite;
-    opacity:.35; pointer-events:none;
-  }
-  @keyframes borderSpin{to{transform:rotate(1turn)}}
-
-  .sp-brand{font-size:24px; color:#F25555; text-align:center; letter-spacing:.6px}
-  .sp-sub{color:#E08A8A; text-align:center; margin:4px 0 12px; font-size:12px}
-
-  .sp-hud{display:flex;gap:12px;justify-content:space-between;border:2px solid #F25555;border-radius:10px;padding:8px 10px;margin:6px 0 12px;font-size:12px;background:#000}
-  .sp-panel{border:2px solid #F25555;border-radius:12px;padding:12px;background:#000}
-  .sp-stage{font-size:20px;text-align:center;color:#F25555;text-shadow:0 0 6px rgba(242,85,85,.45)}
-  .sp-pct{color:#ffd7dc;text-align:center;margin:4px 0 6px;font-size:12px}
-
-  .sp-meter{height:14px;border:2px solid #F25555;border-radius:10px;overflow:hidden;background:#0a0a0a}
-  .sp-meter>i{display:block;height:100%;width:0%;
-    background:
-      linear-gradient(90deg,rgba(224,75,75,.4),rgba(242,85,85,.9)),
-      repeating-linear-gradient(90deg,rgba(0,0,0,.2) 0 6px, transparent 6px 12px);
-    box-shadow:0 0 14px rgba(242,85,85,.65);
-  }
+  /* ===== Splash (이전 심플 UI 복원) ===== */
+  #splash{position:fixed; inset:0; z-index:9999; background:#000; display:grid; place-items:center}
+  .sp-frame{width:min(920px,96vw); border:2px solid #F25555; border-radius:14px; padding:18px; background:#000; box-shadow:0 0 22px rgba(0,0,0,.5), inset 0 0 20px rgba(0,0,0,.35)}
+  .sp-brand{font-size:24px; color:#F25555; text-align:center}
+  .sp-sub{color:#E08A8A; text-align:center; margin:4px 0 10px; font-size:12px}
+  .sp-hud{display:flex;gap:12px;justify-content:space-between;border:2px solid #F25555;border-radius:10px;padding:8px 10px;margin:8px 0 12px;font-size:12px}
+  .sp-panel{border:2px solid #F25555;border-radius:12px;padding:12px}
+  .sp-stage{font-size:20px;text-align:center;color:#F25555}
+  .sp-pct{color:#E08A8A;text-align:center;margin-bottom:6px;font-size:12px}
+  .sp-meter{height:12px;border:2px solid #F25555;border-radius:10px;overflow:hidden}
+  .sp-meter>i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#E04B4B,#F25555)}
   .sp-log{font-size:12px;background:#000;border:1px dashed rgba(242,85,85,.35);border-radius:10px;padding:8px;min-height:60px;color:#ffdcdc}
 
-  /* === Layout === */
+  /* ===== Layout ===== */
   header{position:sticky;top:0;z-index:10;background:linear-gradient(#19080b,#120508);border-bottom:1px solid var(--red2);padding:8px 12px;box-shadow:inset 0 -2px 0 0 #000}
   .topbar{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;gap:10px;justify-content:space-between}
   h1{margin:0;font-size:16px;color:#fff}
   .nav{display:flex;gap:8px;flex-wrap:wrap}
   .btn{appearance:none;border:1px solid var(--red2);background:linear-gradient(#16060a,#100408);color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:12px}
   .btn--link{color:#fff;text-decoration:none}
-  .btn:focus-visible{outline:2px solid var(--red)}
+  .btn:focus-visible{outline:2px solid --red}
 
   .wrap{max-width:var(--maxw);margin:0 auto;padding:16px;display:grid;gap:16px}
   .section{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:inset 0 0 0 2px #000}
@@ -144,7 +109,7 @@
   </style>
 </head>
 <body>
-  <!-- Splash -->
+  <!-- Splash (simple) -->
   <section id="splash" aria-hidden="true">
     <div class="sp-frame">
       <div class="sp-brand">WHITE BOX</div>
@@ -164,7 +129,6 @@
       <h1>WHITE BOX — Story</h1>
       <nav class="nav" aria-label="바로가기">
         <a class="btn btn--link" href="./index.html" aria-current="page">스토리</a>
-        <!-- 404 방지: 확실한 상대 경로 + JS 내비게이션 보강 -->
         <a class="btn btn--link" id="go-box" href="./box.html">포켓몬 박스</a>
       </nav>
     </div>
@@ -176,7 +140,6 @@
       <h2 class="sec-title"><span class="pb" aria-hidden="true"></span>WHITE / 29 (BW)</h2>
       <div class="profile-grid">
         <div class="avatar">
-          <!-- 프로필: OP.png -->
           <img src="OP.png" alt="연구원 화이트 사진" onerror="this.onerror=null;this.src='pp.png'">
         </div>
         <div>
@@ -199,13 +162,11 @@
       <h2 class="sec-title"><span class="pb" aria-hidden="true"></span>스토리</h2>
       <div class="story-grid">
         <div class="card">
-          <!-- 대사창 -->
           <div class="dialog" data-speaker="WHITE">
             <p>“괜찮다면 당신의 포켓몬을 <b>완벽하게</b> 해 드리지요.”</p>
             <span class="tri" aria-hidden="true">▼</span>
           </div>
 
-          <!-- 안내 문구 + 선택지 -->
           <div class="choices">
             <p class="choices-intro">
               포켓몬스터 B/W 블랙시티에서 조우 가능하다.<br>
@@ -237,7 +198,6 @@
                  onerror="this.onerror=null;this.src='i.png'">
           </div>
           <div>
-            <!-- ‘연구원 화이트’만 볼드 -->
             <p>블랙시티에서 Lv.15일 때 <b>연구원 화이트</b>에게서 받았다. 말수가 적은 어린아이 모습으로 둔갑해 지내는 경우가 많다. 화이트의 어린 시절을 흉내 내는 것 같다.</p>
             <div class="chipset" style="margin:6px 0">
               <span class="type t-normal">노말</span>
@@ -267,33 +227,43 @@
   </main>
 
   <script>
-  // Splash 진행 + 글리치 로그
+  /* Splash 진행 (심플) */
   (function(){
     const el=document.getElementById('splash');
     const bar=document.getElementById('sp-bar');
     const pct=document.getElementById('sp-pct');
     const stage=document.getElementById('sp-stage');
     const log=document.getElementById('sp-log');
-    const STAGES=["INITIALIZING","AUTHENTICATING","OPENING POKÉMON BOX","DECRYPTING","INDEXING","VALIDATING","COMPILING","FINALIZING"];
-    const LOGS=["> Opening Pokémon Box…","> Scanning crates…","> Decrypting research data…","> Indexing specimen files…","> Syncing field notes…","> Consolidating metadata…","> Handshake OK","> Seed PRNG…","> Done."];
-    const start=performance.now(), D=3800;
+    const STAGES=["INITIALIZING","AUTHENTICATING","OPENING POKÉMON BOX","DECRYPTING","INDEXING","VALIDATING","FINALIZING"];
+    const LOGS=["> Opening Pokémon Box…","> Scanning crates…","> Decrypting research data…","> Indexing specimen files…","> Syncing field notes…","> Done."];
+    const start=performance.now(), D=3600;
     (function step(t){
       const p=Math.min(1,(t-start)/D), n=Math.round(p*100);
       bar.style.width=n+"%"; pct.textContent=n+"%";
       stage.textContent=STAGES[Math.min(STAGES.length-1,Math.floor(p*(STAGES.length)))];
-      if(n%11===0) log.textContent=LOGS[Math.floor(Math.random()*LOGS.length)];
+      if(n%12===0) log.textContent=LOGS[Math.floor(Math.random()*LOGS.length)];
       if(p<1) requestAnimationFrame(step); else el.remove();
     })(performance.now());
   })();
 
-  // 박스 버튼: 경로 보강 (상대경로 계산)
-  document.getElementById('go-box')?.addEventListener('click', (e)=>{
-    // 강제로 같은 폴더의 box.html로 이동
+  /* 포켓몬 박스: 404 방지 네비 (동일 폴더에서 후보 경로 자동 탐색) */
+  document.getElementById('go-box')?.addEventListener('click', async (e)=>{
     e.preventDefault();
-    const url=new URL('box.html', window.location.href);
-    window.location.assign(url.href);
+    const names = [
+      'box.html','box/index.html','Box.html','pokemon_box.html','pokemon-box.html'
+    ];
+    for (const name of names){
+      const url = new URL(name, window.location.href);
+      try {
+        const res = await fetch(url.href, {method:'HEAD', cache:'no-store', mode:'same-origin'});
+        if (res.ok) { window.location.href = url.href; return; }
+      } catch(_) { /* ignore and try next */ }
+    }
+    // 마지막 수단: box.html로 강제 이동(없다면 서버 404)
+    window.location.href = new URL('box.html', window.location.href).href;
   });
   </script>
 </body>
 </html>
+
 

@@ -1,269 +1,195 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>WHITE BOX — Story</title>
   <link rel="icon" type="image/png" href="pp.png">
   <style>
-  /* ===== Font ===== */
-  @font-face{
-    font-family:'NeoDunggeunmo';
-    src:url('./NeoDunggeunmoPro-Regular.ttf') format('truetype');
-    font-weight:400;font-style:normal;font-display:swap;
+  @font-face {
+    font-family: 'NeoDunggeunmo';
+    src: url('./NeoDunggeunmoPro-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
   }
-
-  /* ===== Theme ===== */
   :root{
-    --font:'NeoDunggeunmo', ui-monospace, "Courier New", monospace;
+    --font:'NeoDunggeunmo', ui-monospace, monospace;
     --bg:#000; --txt:#e9ecef; --mut:#9aa0a6;
-    --panel:#0b0c10; --panel2:#0f1013; --line:#242933;
+    --panel:#0a0b0d; --panel2:#0f1013; --line:#2a2d33;
     --red:#ff2f3e; --red2:#3a0a0f;
-    --maxw:1000px; --gap:16px; --radius:14px;
+    --maxw:1000px;
   }
-  *{box-sizing:border-box} html,body{height:100%}
-  body{margin:0;font-family:var(--font);background:var(--bg);color:var(--txt);line-height:1.6;font-size:14px}
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:var(--font);line-height:1.6;font-size:14px}
 
-  /* ===== Splash (이전 심플 UI 복원) ===== */
-  #splash{position:fixed; inset:0; z-index:9999; background:#000; display:grid; place-items:center}
-  .sp-frame{width:min(920px,96vw); border:2px solid #F25555; border-radius:14px; padding:18px; background:#000; box-shadow:0 0 22px rgba(0,0,0,.5), inset 0 0 20px rgba(0,0,0,.35)}
-  .sp-brand{font-size:24px; color:#F25555; text-align:center}
-  .sp-sub{color:#E08A8A; text-align:center; margin:4px 0 10px; font-size:12px}
-  .sp-hud{display:flex;gap:12px;justify-content:space-between;border:2px solid #F25555;border-radius:10px;padding:8px 10px;margin:8px 0 12px;font-size:12px}
-  .sp-panel{border:2px solid #F25555;border-radius:12px;padding:12px}
-  .sp-stage{font-size:20px;text-align:center;color:#F25555}
-  .sp-pct{color:#E08A8A;text-align:center;margin-bottom:6px;font-size:12px}
-  .sp-meter{height:12px;border:2px solid #F25555;border-radius:10px;overflow:hidden}
-  .sp-meter>i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#E04B4B,#F25555)}
-  .sp-log{font-size:12px;background:#000;border:1px dashed rgba(242,85,85,.35);border-radius:10px;padding:8px;min-height:60px;color:#ffdcdc}
+  /* Splash */
+  #splash{position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center}
+  .splash-box{width:min(880px,95vw);background:#0a0b0d;border:2px solid #F25555;border-radius:14px;padding:24px;text-align:center;color:#e9ecef;box-shadow:0 0 20px rgba(255,60,60,.3),inset 0 0 12px #000}
+  .splash-title{font-size:22px;color:#F25555;margin:0 0 6px;animation:glowPulse 2.6s ease-in-out infinite}
+  .splash-sub{font-size:12px;color:#E08A8A;margin:0 0 16px;animation:softBlink 7s steps(30,end) infinite}
+  .splash-meter{height:14px;border:2px solid #F25555;border-radius:10px;overflow:hidden;margin-bottom:12px}
+  .splash-meter>i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#F25555,#ff9a9a);transition:width 0.2s linear}
+  .splash-pct{font-size:13px;color:#ffdcdc;margin-bottom:8px;animation:softBlink 9s steps(36,end) infinite}
+  .splash-log{font-size:12px;color:#9aa0a6;text-align:left;white-space:pre-line;border:1px dashed rgba(242,85,85,.4);border-radius:10px;padding:8px;min-height:60px;background:#07080a;animation:crtFlicker 4.5s steps(40,end) infinite;position:relative}
+  .splash-log::after{content:"▎";margin-left:6px;color:#ffdcdc;animation:softBlink 1.2s steps(2,end) infinite}
 
-  /* ===== Layout ===== */
+  @keyframes glowPulse{0%{text-shadow:0 0 0 rgba(242,85,85,0)}50%{text-shadow:0 0 8px rgba(242,85,85,.45),0 0 14px rgba(255,210,210,.25)}100%{text-shadow:0 0 0 rgba(242,85,85,0)}}
+  @keyframes softBlink{0%,92%,100%{opacity:1;filter:brightness(1)}94%{opacity:.92;filter:brightness(.98)}96%{opacity:.85;filter:brightness(.96)}98%{opacity:.95;filter:brightness(.99)}}
+  @keyframes crtFlicker{0%{opacity:.96;filter:saturate(1)}50%{opacity:.93;filter:saturate(1.03)}100%{opacity:.96;filter:saturate(1)}}
+
   header{position:sticky;top:0;z-index:10;background:linear-gradient(#19080b,#120508);border-bottom:1px solid var(--red2);padding:8px 12px;box-shadow:inset 0 -2px 0 0 #000}
-  .topbar{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;gap:10px;justify-content:space-between}
-  h1{margin:0;font-size:16px;color:#fff}
-  .nav{display:flex;gap:8px;flex-wrap:wrap}
-  .btn{appearance:none;border:1px solid var(--red2);background:linear-gradient(#16060a,#100408);color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:12px}
-  .btn--link{color:#fff;text-decoration:none}
-  .btn:focus-visible{outline:2px solid --red}
+  .top{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
+  h1{margin:0;color:#fff;font-size:16px}
+  nav{display:flex;gap:8px}
+  .btn{appearance:none;border:1px solid var(--red2);background:linear-gradient(#16060a,#100408);color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:12px;text-decoration:none}
 
   .wrap{max-width:var(--maxw);margin:0 auto;padding:16px;display:grid;gap:16px}
-  .section{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:inset 0 0 0 2px #000}
-  .sec-title{margin:0 0 10px;font-size:16px;color:#fff;letter-spacing:.2px;display:flex;align-items:center;gap:8px}
-
-  /* 포켓몬볼 아이콘 */
-  .pb{width:14px;height:14px;border-radius:50%;position:relative;display:inline-block;flex:0 0 14px;
-      background:linear-gradient(#e33 0 50%, #fff 50% 100%); border:1px solid #000; box-shadow:inset 0 -1px 0 #000, inset 0 1px 0 #000}
+  .section{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:inset 0 0 0 2px #000}
+  .sec-title{margin:0 0 10px;font-size:16px;color:#fff;display:flex;align-items:center;gap:8px}
+  .pb{width:14px;height:14px;border-radius:50%;position:relative;display:inline-block;background:linear-gradient(#e33 0 50%,#fff 50% 100%);border:1px solid #000}
   .pb::before{content:"";position:absolute;left:-1px;right:-1px;top:calc(50% - 1px);height:2px;background:#000}
   .pb::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:6px;height:6px;background:#bbb;border:2px solid #000;border-radius:50%}
 
-  .card{background:#0a0b0d;border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:inset 0 0 0 2px #000}
-  .card h3{margin:0 0 6px;font-size:14px}
-  .muted{color:var(--mut);font-size:13px}
-
-  /* Profile */
-  .profile-grid{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:start}
-  @media (max-width:720px){.profile-grid{grid-template-columns:1fr}}
-  .avatar{width:100%;height:120px;border:1px solid var(--line);border-radius:12px;background:#07080a;display:grid;place-items:center;overflow:hidden;position:relative}
+  .grid-p{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:start}
+  @media(max-width:720px){.grid-p{grid-template-columns:1fr}}
+  .avatar{width:100%;height:120px;border:1px solid var(--line);border-radius:12px;background:#07080a;display:grid;place-items:center;overflow:hidden}
   .avatar img{width:100%;height:100%;object-fit:cover}
-  .avatar::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
   .pill{display:inline-flex;gap:6px;align-items:center;padding:2px 6px;border:1px solid rgba(255,120,120,.5);background:rgba(255,47,62,.12);border-radius:999px;font-size:11px;color:#ffd7dc;width:max-content}
 
-  /* Story grid */
-  .story-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
-  @media (max-width:860px){.story-grid{grid-template-columns:1fr}}
-
-  /* 포켓몬 대사창 (각진 + 2px + ▼) */
-  .dialog{
-    position:relative; padding:12px 14px 14px;
-    background:linear-gradient(180deg,#101217,#0b0d12);
-    border:2px solid #e9ecef; border-radius:0;
-    box-shadow:inset 0 0 0 2px #000, 0 0 0 2px #000; font-size:14px;
-  }
-  .dialog[data-speaker]::before{
-    content:attr(data-speaker);
-    position:absolute; top:-12px; left:12px;
-    font-size:11px; color:#000; background:#e9ecef;
-    border:2px solid #000; border-radius:6px; padding:0 6px; line-height:16px; height:16px;
-  }
-  .dialog .tri{position:absolute; right:10px; bottom:8px; font-size:14px; line-height:1; color:#ff2f3e}
-
-  /* 선택지 */
+  .grid-s{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
+  @media(max-width:860px){.grid-s{grid-template-columns:1fr}}
+  .dialog{position:relative;padding:12px 14px 14px;background:linear-gradient(180deg,#101217,#0b0d12);border:2px solid #e9ecef;border-radius:0;box-shadow:inset 0 0 0 2px #000,0 0 0 2px #000;font-size:14px}
+  .dialog[data-speaker]::before{content:attr(data-speaker);position:absolute;top:-12px;left:12px;font-size:11px;color:#000;background:#e9ecef;border:2px solid #000;border-radius:6px;padding:0 6px;line-height:16px;height:16px}
+  .dialog .tri{position:absolute;right:10px;bottom:8px;font-size:14px;line-height:1;color:#ff2f3e}
   .choices{display:grid;gap:10px;margin-top:10px}
   .choice{display:flex;gap:8px;align-items:flex-start}
-  .choice .arrow{color:#ff616d;line-height:1.4;font-size:14px}
+  .choice .arrow{color:#ff616d;font-size:14px;line-height:1.4}
   .choices-intro{margin:2px 0 2px;color:var(--mut);font-size:13px}
 
-  /* Specimen (Hisui Zoroark) */
   .spec{display:grid;grid-template-rows:220px auto;gap:8px}
   .spec-fig{position:relative;border:1px solid #22272f;border-radius:12px;background:#06070a;display:grid;place-items:center;overflow:hidden}
   .spec-fig::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
   .spec-fig img{max-width:100%;max-height:100%;object-fit:contain}
   .chipset{display:flex;gap:6px 8px;flex-wrap:wrap}
-  .type{font-size:11px;padding:0 7px;line-height:1.35;border-radius:999px;border:1px solid #303643;background:#0c0e12}
-  .t-normal{background:#A8A77A;color:#111;border-color:#8a8b5f}
-  .t-ghost{background:#735797;color:#fff;border-color:#5c467a}
-
-  /* Epilogue grid */
-  .epilogue-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  @media (max-width:860px){.epilogue-grid{grid-template-columns:1fr}}
+  .type{font-size:10px;padding:0 6px;line-height:1.3;border:1px solid #303643;background:#0c0e12;color:#eaeaea;border-radius:999px}
+  .t-normal{background:#A8A77A;color:#111;border-color:#8a8b5f}.t-ghost{background:#735797;color:#fff;border-color:#5c467a}
+  .grid-e{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:860px){.grid-e{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-  <!-- Splash (simple) -->
-  <section id="splash" aria-hidden="true">
-    <div class="sp-frame">
-      <div class="sp-brand">WHITE BOX</div>
-      <div class="sp-sub">POKÉMON BOX – RESEARCH DATA ARCHIVE</div>
-      <div class="sp-hud"><div>PROJECT: POKÉMON BOX</div><div>RESEARCHER: WHITE</div><div>STATUS: ONLINE</div></div>
-      <div class="sp-panel">
-        <div class="sp-stage" id="sp-stage">INITIALIZING</div>
-        <div class="sp-pct" id="sp-pct">0%</div>
-        <div class="sp-meter"><i id="sp-bar"></i></div>
-        <div class="sp-log" id="sp-log">&gt; Opening Pokémon Box…</div>
+<!-- Splash -->
+<section id="splash" aria-hidden="true">
+  <div class="splash-box">
+    <div class="splash-title">WHITE RESEARCH LAB</div>
+    <div class="splash-sub">POKÉMON BOX POKEDEX — Data Archive &amp; Field Notes</div>
+    <div class="splash-meter"><i id="splash-bar"></i></div>
+    <div class="splash-pct" id="splash-pct">0%</div>
+    <div class="splash-log" id="splash-log">&gt; Booting system…</div>
+  </div>
+</section>
+
+<header>
+  <div class="top">
+    <h1>WHITE BOX — Story</h1>
+    <nav>
+      <a class="btn" href="./index.html" aria-current="page">스토리</a>
+      <a class="btn" href="./box/">포켓몬 박스</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- 프로필 -->
+  <section class="section">
+    <h2 class="sec-title"><span class="pb"></span>WHITE / 29 (BW)</h2>
+    <div class="grid-p">
+      <div class="avatar"><img src="OP.png" alt="연구원 화이트 사진" onerror="this.onerror=null;this.src='pp.png'"></div>
+      <div>
+        <span class="pill">RESEARCHER • BLACK CITY</span>
+        <div class="card" style="margin-top:8px">
+          <h3>개요</h3>
+          <ul>
+            <li>블랙 버전에만 출연한다 – 플레이어에게 조로아를 선물해주고 떠나는 단역.</li>
+            <li><b>연구원 화이트</b>: “진정한 유대는 포켓몬과의 감정교류가 아닌 유전자 프로그래밍에서 비롯됩니다”</li>
+            <li>포켓몬의 유전자를 불법 조작하다 쫓겨난 연구원. 뮤를 이용한 복제·강화 실험에 관여했다는 소문이 돈다.</li>
+            <li>한때는 진화 연구의 선구자로 명성을 떨쳤지만, 지금은 학계와 포켓몬 리그에서 제명당한 과거 인물일 뿐…</li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
 
-  <header>
-    <div class="topbar">
-      <h1>WHITE BOX — Story</h1>
-      <nav class="nav" aria-label="바로가기">
-        <a class="btn btn--link" href="./index.html" aria-current="page">스토리</a>
-        <a class="btn btn--link" id="go-box" href="./box.html">포켓몬 박스</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="wrap">
-    <!-- WHITE 프로필 -->
-    <section class="section">
-      <h2 class="sec-title"><span class="pb" aria-hidden="true"></span>WHITE / 29 (BW)</h2>
-      <div class="profile-grid">
-        <div class="avatar">
-          <img src="OP.png" alt="연구원 화이트 사진" onerror="this.onerror=null;this.src='pp.png'">
+  <!-- 스토리 -->
+  <section class="section">
+    <h2 class="sec-title"><span class="pb"></span>스토리</h2>
+    <div class="grid-s">
+      <div class="card">
+        <div class="dialog" data-speaker="WHITE">
+          <p>“괜찮다면 당신의 포켓몬을 <b>완벽하게</b> 해 드리지요.”</p>
+          <span class="tri">▼</span>
+        </div>
+        <div class="choices">
+          <p class="choices-intro">
+            포켓몬스터 B/W 블랙시티에서 조우 가능하다.<br>
+            플레이어에게 파트너 포켓몬을 강화해 주겠다고 제안하며 이벤트가 시작된다. .
+          </p>
+          <div class="choice"><span class="arrow">›</span><div><b>수락한다</b><br>스타팅 포켓몬을 넘겨주는 대가로 70,000원을 받고 이벤트 종료</div></div>
+          <div class="choice"><span class="arrow">›</span><div><b>거절한다</b><br>플레이어의 뒤를 몰래 따라다니기 시작. 포켓몬과의 교류를 관찰하는 모습을 보인다</div></div>
+        </div>
+      </div>
+      <div class="card spec">
+        <div class="spec-fig">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/571-hisui.png" alt="히스이 조로아크" onerror="this.onerror=null;this.src='i.png'">
         </div>
         <div>
-          <span class="pill">RESEARCHER • BLACK CITY</span>
-          <div class="card" style="margin-top:8px">
-            <h3>개요</h3>
-            <ul>
-              <li>블랙 버전에만 출연한다 – 플레이어에게 조로아를 선물해주고 떠나는 단역.</li>
-              <li>화이트: <q>진정한 유대는 포켓몬과의 감정교류가 아닌 유전자 프로그래밍에서 비롯됩니다</q></li>
-              <li>포켓몬의 유전자를 불법 조작하다 쫓겨난 연구원. 뮤를 이용한 복제·강화 실험에 관여했다는 소문이 돈다.</li>
-              <li>한때는 진화 연구의 선구자로 명성을 떨쳤지만, 지금은 학계와 포켓몬 리그에서 제명당한 과거 인물일 뿐…</li>
-            </ul>
+          <p>블랙시티에서 Lv.15일 때 <b>연구원 화이트</b>에게서 받았다. 말수가 적은 어린아이 모습으로 둔갑해 지내는 경우가 많다. 화이트의 어린 시절을 흉내 내는 것 같다.</p>
+          <div class="chipset" style="margin:6px 0">
+            <span class="type t-normal">노말</span>
+            <span class="type t-ghost">고스트</span>
           </div>
+          <p class="muted">특성: 일루전 — 배틀 등장 시 상대 포켓몬의 외형을 모방한다.</p>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- 스토리 -->
-    <section class="section">
-      <h2 class="sec-title"><span class="pb" aria-hidden="true"></span>스토리</h2>
-      <div class="story-grid">
-        <div class="card">
-          <div class="dialog" data-speaker="WHITE">
-            <p>“괜찮다면 당신의 포켓몬을 <b>완벽하게</b> 해 드리지요.”</p>
-            <span class="tri" aria-hidden="true">▼</span>
-          </div>
-
-          <div class="choices">
-            <p class="choices-intro">
-              포켓몬스터 B/W 블랙시티에서 조우 가능하다.<br>
-              플레이어에게 파트너 포켓몬을 강화해 주겠다고 제안하며 이벤트가 시작된다. .
-            </p>
-
-            <div class="choice">
-              <span class="arrow">›</span>
-              <div>
-                <b>수락한다</b><br>
-                스타팅 포켓몬을 넘겨주는 대가로 <b>70,000</b>원을 받고 이벤트 종료
-              </div>
-            </div>
-            <div class="choice">
-              <span class="arrow">›</span>
-              <div>
-                <b>거절한다</b><br>
-                플레이어의 뒤를 몰래 따라다니기 시작. 포켓몬과의 교류를 관찰하는 모습을 보인다
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 히스이 조로아크 -->
-        <div class="card spec">
-          <div class="spec-fig">
-            <img alt="히스이 조로아크"
-                 src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/571-hisui.png"
-                 onerror="this.onerror=null;this.src='i.png'">
-          </div>
-          <div>
-            <p>블랙시티에서 Lv.15일 때 <b>연구원 화이트</b>에게서 받았다. 말수가 적은 어린아이 모습으로 둔갑해 지내는 경우가 많다. 화이트의 어린 시절을 흉내 내는 것 같다.</p>
-            <div class="chipset" style="margin:6px 0">
-              <span class="type t-normal">노말</span>
-              <span class="type t-ghost">고스트</span>
-            </div>
-            <p class="muted">특성: 일루전 — 배틀 등장 시 상대 포켓몬의 외형을 모방한다.</p>
-          </div>
-        </div>
+  <!-- 에필로그 -->
+  <section class="section">
+    <h2 class="sec-title"><span class="pb"></span>에필로그</h2>
+    <div class="grid-e">
+      <div class="card">
+        <h3>다음 시즌 안내</h3>
+        <p>다음 시즌인 B·W 2에서 화이트를 다시 만나 그동안 키운 조로아(조로아크)를 돌려줄 수 있다.</p>
+        <p>이제는 실험대상이 아닌 ‘파트너’로 잘 키워보겠다며 고맙다는 인사와 함께 퇴장. 받는 건 없지만 플레이어는 기분이 좋아진다. (…)</p>
       </div>
-    </section>
-
-    <!-- 에필로그 -->
-    <section class="section">
-      <h2 class="sec-title"><span class="pb" aria-hidden="true"></span>에필로그</h2>
-      <div class="epilogue-grid">
-        <div class="card">
-          <h3>다음 시즌 안내</h3>
-          <p>다음 시즌인 B·W 2에서 화이트를 다시 만나 그동안 키운 조로아(조로아크)를 돌려줄 수 있다.</p>
-          <p>이제는 실험대상이 아닌 ‘파트너’로 잘 키워보겠다며 고맙다는 인사와 함께 퇴장. 받는 건 없지만 플레이어는 기분이 좋아진다. (…)</p>
-        </div>
-        <div class="card">
-          <h3>시리즈의 본질</h3>
-          <p class="muted">* 포켓몬 시리즈의 본질은 <q>좋아하는 포켓몬과 함께 모험을 한다</q>에 있지만, 스칼렛/바이올렛 출시 이후 좋은 개체치를 가진 포켓몬만 육성하고 나머지는 방출하는 행위가 반복되며… 이 이벤트가 다시금 재조명받게 됨.</p>
-        </div>
+      <div class="card">
+        <h3>시리즈의 본질</h3>
+        <p class="muted">* 포켓몬 시리즈의 본질은 <q>좋아하는 포켓몬과 함께 모험을 한다</q>에 있지만, 스칼렛/바이올렛 출시 이후 좋은 개체치를 가진 포켓몬만 육성하고 나머지는 방출하는 행위가 반복되며… 이 이벤트가 다시금 재조명받게 됨.</p>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
+</main>
 
-  <script>
-  /* Splash 진행 (심플) */
-  (function(){
-    const el=document.getElementById('splash');
-    const bar=document.getElementById('sp-bar');
-    const pct=document.getElementById('sp-pct');
-    const stage=document.getElementById('sp-stage');
-    const log=document.getElementById('sp-log');
-    const STAGES=["INITIALIZING","AUTHENTICATING","OPENING POKÉMON BOX","DECRYPTING","INDEXING","VALIDATING","FINALIZING"];
-    const LOGS=["> Opening Pokémon Box…","> Scanning crates…","> Decrypting research data…","> Indexing specimen files…","> Syncing field notes…","> Done."];
-    const start=performance.now(), D=3600;
-    (function step(t){
-      const p=Math.min(1,(t-start)/D), n=Math.round(p*100);
-      bar.style.width=n+"%"; pct.textContent=n+"%";
-      stage.textContent=STAGES[Math.min(STAGES.length-1,Math.floor(p*(STAGES.length)))];
-      if(n%12===0) log.textContent=LOGS[Math.floor(Math.random()*LOGS.length)];
-      if(p<1) requestAnimationFrame(step); else el.remove();
-    })(performance.now());
-  })();
-
-  /* 포켓몬 박스: 404 방지 네비 (동일 폴더에서 후보 경로 자동 탐색) */
-  document.getElementById('go-box')?.addEventListener('click', async (e)=>{
-    e.preventDefault();
-    const names = [
-      'box.html','box/index.html','Box.html','pokemon_box.html','pokemon-box.html'
-    ];
-    for (const name of names){
-      const url = new URL(name, window.location.href);
-      try {
-        const res = await fetch(url.href, {method:'HEAD', cache:'no-store', mode:'same-origin'});
-        if (res.ok) { window.location.href = url.href; return; }
-      } catch(_) { /* ignore and try next */ }
-    }
-    // 마지막 수단: box.html로 강제 이동(없다면 서버 404)
-    window.location.href = new URL('box.html', window.location.href).href;
-  });
-  </script>
+<script>
+(function(){
+  const el=document.getElementById('splash');
+  const bar=document.getElementById('splash-bar');
+  const pct=document.getElementById('splash-pct');
+  const log=document.getElementById('splash-log');
+  const STAGES=["INITIALIZING MODULES...","LOADING SPECIMEN DATA...","ACCESSING POKÉMON BOX...","DECRYPTING ARCHIVES...","SYNCHRONIZING FIELD NOTES...","FINALIZING...","READY"];
+  const LOGS=["> Booting system..."," > Scanning crates..."," > Decrypting specimens..."," > Indexing sprites..."," > Syncing field notes..."," > Done."];
+  let stageIndex=0; const D=3800; const start=performance.now();
+  (function step(t){
+    const p=Math.min(1,(t-start)/D), n=Math.round(p*100);
+    bar.style.width=n+"%"; pct.textContent=n+"%";
+    if(n>=((stageIndex+1)*(100/STAGES.length))){ log.textContent=STAGES[stageIndex]||STAGES.at(-1); stageIndex++; }
+    if(p<1){ requestAnimationFrame(step);} else{ el.remove(); }
+  })(performance.now());
+})();
+</script>
 </body>
 </html>
-
 

@@ -85,25 +85,24 @@
   .spec-fig{position:relative;border:1px solid #22272f;border-radius:12px;background:#06070a;display:grid;place-items:center;overflow:hidden;box-shadow:inset 0 0 0 2px #000}
   .spec-fig img{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
 
-.music-btn{
-  appearance:none; cursor:pointer;
-  display:inline-flex; align-items:center; justify-content:center; gap:6px;
-  padding:8px 18px;
-  border:1px solid #666;         /* 회색 테두리 */
-  background:#222;               /* 회색 배경 */
-  color:#e0e0e0;                 /* 글씨/아이콘 밝은 회색 */
-  font-size:12px; font-weight:bold;
-  border-radius:6px;
-  box-shadow:inset 0 0 0 2px #000;
-  transition:background .25s, color .25s, border-color .25s;
-}
-.music-btn:hover{
-  background:#333;               /* hover 시 조금 더 밝은 회색 */
-  color:#fff;
-  border-color:#888;
-}
-.music-btn svg{width:14px;height:14px;fill:currentColor}
+  /* ===== BGM 버튼 ===== */
+  .music-btn{
+    appearance:none; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center; gap:6px;
+    padding:8px 18px;
+    border:1px solid #666; background:#222; color:#e0e0e0;
+    font-size:12px; font-weight:bold; border-radius:6px;
+    box-shadow:inset 0 0 0 2px #000; transition:background .25s,color .25s,border-color .25s;
+  }
+  .music-btn:hover{ background:#333; color:#fff; border-color:#888; }
+  .music-btn svg{width:14px;height:14px;fill:currentColor}
 
+  /* ===== 선택지 스타일 & 붉은 ▶ ===== */
+  .choices{margin-top:10px;display:grid;gap:8px}
+  .choice{display:flex;gap:8px;align-items:flex-start;padding:8px;border:1px solid var(--line);border-radius:8px;background:#0b0d12}
+  .arrow{color:var(--red);margin-top:2px;font-weight:bold}
+  .arrow::before{content:"▶";}
+  .muted{color:var(--mut)}
   </style>
 </head>
 <body>
@@ -150,12 +149,11 @@
           <button id="music-btn" type="button" class="music-btn" aria-pressed="false" aria-controls="bgm" title="배경음악 재생/일시정지">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
             <span>BGM</span>
-            <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
           </button>
         </div>
-        <audio id="bgm" preload="none">
+        <audio id="bgm" preload="metadata">
           <source src="mt-moon.mp3" type="audio/mpeg">
-          <source src="mt-moon.ogg" type="audio/ogg">
+          <!-- 필요하면 ogg 추가 -->
         </audio>
       </div>
 
@@ -172,7 +170,7 @@
           <h3>연구원 화이트</h3>
           <ul>
             <li>“진정한 유대는 포켓몬과의 감정교류가 아닌 유전자 프로그래밍에서 비롯됩니다”</li>
-            <li><b>블랙 버전에만 출연한다 – 플레이어에게 조로아를 증정하고 떠나는 NPC.</li>
+            <li><b>블랙 버전에만 출연한다 – 플레이어에게 조로아를 증정하고 떠나는 NPC.</b></li>
             <li>포켓몬의 유전자를 불법 조작하다 쫓겨난 연구원. 뮤를 이용한 복제·강화 실험에 관여했다는 소문이 돈다.</li>
             <li>한때는 진화 연구의 선구자로 명성을 떨쳤지만, 지금은 학계와 포켓몬 리그에서 제명당한 과거 인물일 뿐…</li>
           </ul>
@@ -190,48 +188,61 @@
           <p>“괜찮다면 당신의 포켓몬을 <b>완벽하게</b> 해 드리죠.”</p>
           <span class="tri">▼</span>
         </div>
+
+        <!-- 선택지 -->
         <div class="choices">
           <p class="choices-intro">
-            당신의 포켓몬을 '건강하게' 해 드리죠의 패러디. 블랙시티에서 조우 가능하다. <br>
-            플레이어에게 파트너 포켓몬을 강화해 주겠다고 제안하며 이벤트가 시작된다.
+            블랙시티에서 조우 가능하다. 플레이어에게 파트너 포켓몬을 강화해 주겠다고 제안하며 이벤트가 시작된다.
           </p>
-          <div class="choice"><span class="arrow"></span><div><b>▼수락한다</b><br>스타팅 포켓몬을 넘겨주는 대가로 70,000원을 받고 이벤트가 종료된다.</div></div>
-          <div class="choice"><span class="arrow"></span><div><b>▼거절한다</b><br>플레이어의 뒤를 몰래 따라다니기 시작. 포켓몬과의 교류를 관찰하는 모습을 보인다.</div></div>
-           <p> 이후 화이트는 각종 유전자 조작을 통해 Lv을 한계치까지 올린 포켓몬들로 승부를 걸어온다. 그러나 화이트의 확정 패배.이후 “진정한 유대는 함께한 시간과 진심에서 비롯되는 걸까요…”라는 대사와 함께, 행복하게 만들어달라는 부탁을 남기며 자신이 실험용으로 길러온 조로아를 플레이어에게 건넨다.</div></div>
+          <div class="choice">
+            <span class="arrow"></span>
+            <div><b>수락한다</b><br>스타팅 포켓몬을 넘겨주는 대가로 70,000원을 받고 이벤트가 종료.</div>
+          </div>
+          <div class="choice">
+            <span class="arrow"></span>
+            <div><b>거절한다</b><br>플레이어의 뒤를 몰래 따라다니며 무언가를 관찰하는 모습을 보인다.</div>
+          </div>
+        </div>
+
+        <!-- 선택지 밖으로 분리한 추가 설명 -->
+        <p class="muted" style="margin-top:10px">
+          이후 화이트는 각종 유전자 조작으로 레벨을 한계치까지 올린 포켓몬들로 승부를 걸어오지만 확정 패배한다.  
+          이후 “진정한 유대는 진심에서 비롯되는 걸까요…”라는 대사와 함께,
+          자신이 실험용으로 길러온 조로아를 플레이어에게 건넨다.
+        </p>
       </div>
 
       <div class="card spec">
         <div class="spec-fig">
-          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/571-hisui.png" alt="히스이 조로아크" onerror="this.onerror=null;this.src='i.png'">
+          <img src="kkk.png" alt="히스이 조로아크" onerror="this.onerror=null;this.src='i.png'">
         </div>
         <div>
-          <p>블랙시티에서 Lv.15일 때 <b>연구원 화이트</b>에게서 받았다. 말수가 적은 어린아이 모습으로 둔갑해 지내는 경우가 많다. 화이트의 어린 시절을 흉내 내는 것 같다.</p>
+          <p>블랙시티에서 특정 이벤트를 통해 <b>연구원 화이트</b>에게서 받을 수 있다. 화이트의 어린 시절을 흉내 내고 있다. 망토를 깊게 눌러쓴 모습과 표정에서 과거를 어느 정도 짐작할 수 있다.</p>
           <div class="chipset" style="margin:6px 0">
             <span class="type t-normal">노말</span>
             <span class="type t-ghost">고스트</span>
           </div>
-          <p class="muted">특성: 일루전 — 배틀 등장 시 상대 포켓몬의 외형을 모방한다.</p>
+          <p class="muted">일루전 : 배틀 등장 시 상대 포켓몬의 외형을 모방한다.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 에필로그 (한 박스로 통합) -->
+  <!-- 에필로그 -->
   <section class="section">
     <h2 class="sec-title"><span class="pb"></span>에필로그</h2>
     <div class="card">
-      <h3>다음 시즌 안내 & 시리즈의 본질</h3>
-      <p>다음 시즌인 B·W 2에서 화이트를 다시 만나 그동안 키운 조로아(조로아크)를 돌려줄 수 있다.</p>
-      <p>이제는 실험대상이 아닌 ‘파트너’로 잘 키워보겠다며 고맙다는 인사와 함께 퇴장. 받는 건 없지만 플레이어는 기분이 좋아진다. (…) </p>
-      <p class="muted">* 포켓몬 시리즈의 본질은 <q>좋아하는 포켓몬과 함께 모험을 한다</q>에 있지만, 스칼렛/바이올렛 출시 이후 좋은 개체치를 가진 포켓몬만 육성하고 나머지는 방출하는 행위가 반복되며… 이 이벤트가 다시금 재조명받게 됨.</p>
+      <p>다음 시즌인 B·W 2에서 화이트를 다시 만나 그동안 키운 조로아/조로아크를 돌려줄 수 있다.</p>
+      <p>이제는 실험대상이 아닌 ‘파트너’로 잘 키워보겠다며 고맙다는 인사와 함께 퇴장. 받는 건 없지만 플레이어는 기분이 룽해진다. (…) </p>
+      <p class="muted">* 포켓몬 시리즈의 본질은 <q>좋아하는 포켓몬과 함께 모험을 한다</q>에 있지만, 스칼렛/바이올렛 출시 이후 좋은 개체치를 가진 포켓몬만 육성하고 나머지는 방출하는 행위가 반복되며 이벤트가 다시금 재조명받게 된다.</p>
     </div>
   </section>
 </main>
 
-<!-- 로딩 스크립트: 타이머 기반 + 페이드아웃(안전 종료 보장) -->
+<!-- 로딩 스크립트 -->
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-  const el   = document.getElementById('splash');
+  const el = document.getElementById('splash');
   if(!el) return;
 
   const bar  = document.getElementById('sp-bar');
@@ -239,57 +250,25 @@ document.addEventListener('DOMContentLoaded', function(){
   const stage= document.getElementById('sp-stage');
   const log  = document.getElementById('sp-log');
 
-  const STAGES=[
-    "INITIALIZING","AUTHENTICATING","OPENING POKÉMON BOX",
-    "DECRYPTING","INDEXING","VALIDATING","COMPILING","FINALIZING","READY"
-  ];
-  const LOGS=[
-    "> Opening Pokémon Box…",
-    "> Scanning crates…",
-    "> Decrypting research data…",
-    "> Indexing specimen files…",
-    "> Syncing field notes…",
-    "> Consolidating metadata…"
-  ];
+  const STAGES=["INITIALIZING","AUTHENTICATING","OPENING POKÉMON BOX","DECRYPTING","INDEXING","VALIDATING","COMPILING","FINALIZING","READY"];
+  const LOGS=["> Opening Pokémon Box…","> Scanning crates…","> Decrypting research data…","> Indexing specimen files…","> Syncing field notes…","> Consolidating metadata…"];
 
-  const D = 4000; // 목표 로딩 시간(ms)
-  const start = Date.now();
-  let   lastStageIdx = 0;
-
+  const D = 4000; const start = Date.now(); let lastStageIdx = 0;
   const tick = setInterval(()=>{
-    const now = Date.now();
-    const p   = Math.min(1, (now - start) / D);
-    const n   = Math.round(p * 100);
-
-    bar.style.width = n + "%";
-    pct.textContent = n + "%";
-
+    const p = Math.min(1, (Date.now() - start) / D);
+    const n = Math.round(p * 100);
+    bar.style.width = n + "%"; pct.textContent = n + "%";
     const idx = Math.min(STAGES.length-1, Math.floor(p * STAGES.length));
-    if (idx !== lastStageIdx) {
-      stage.textContent = STAGES[idx];
-      lastStageIdx = idx;
-    }
-
-    if (n % 13 === 0) {
-      log.textContent = LOGS[Math.floor(Math.random()*LOGS.length)];
-    }
-
+    if (idx !== lastStageIdx) { stage.textContent = STAGES[idx]; lastStageIdx = idx; }
+    if (n % 13 === 0) { log.textContent = LOGS[Math.floor(Math.random()*LOGS.length)]; }
     if (p >= 1) finish();
   }, 50);
-
-  // 혹시 정지되더라도 강제 닫힘(여유 6초)
   const killer = setTimeout(finish, D + 6000);
-
-  function finish(){
-    clearInterval(tick);
-    clearTimeout(killer);
-    el.classList.add('hide');        // 페이드아웃
-    setTimeout(()=>{ el.remove(); }, 380);
-  }
+  function finish(){ clearInterval(tick); clearTimeout(killer); el.classList.add('hide'); setTimeout(()=>{ el.remove(); }, 380); }
 });
 </script>
 
-<!-- 음악 토글: 텍스트 "BGM" 고정, 아이콘만 변경 -->
+<!-- 음악 토글 -->
 <script>
 (function(){
   const btn=document.getElementById('music-btn');
@@ -303,7 +282,7 @@ document.addEventListener('DOMContentLoaded', function(){
   function setState(on){
     playing=on;
     btn.setAttribute('aria-pressed', on?'true':'false');
-    btn.innerHTML = (on?iconPause:iconPlay) + '<span>BGM</span><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>';
+    btn.innerHTML = (on?iconPause:iconPlay) + '<span>BGM</span>';
   }
   setState(false);
 
@@ -311,7 +290,9 @@ document.addEventListener('DOMContentLoaded', function(){
     try{
       if(!playing){ await audio.play(); setState(true); }
       else { audio.pause(); setState(false); }
-    }catch(e){ alert('음원 파일(mt-moon.mp3 또는 mt-moon.ogg)을 이 파일과 같은 폴더에 넣어주세요.'); }
+    }catch(e){
+      alert('음원 파일(mt-moon.mp3)을 index.html과 같은 폴더에 넣어주세요.');
+    }
   });
   audio.addEventListener('ended', ()=> setState(false));
 })();

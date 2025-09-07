@@ -6,14 +6,14 @@
   <title>WHITE BOX — Story</title>
   <link rel="icon" type="image/png" href="pp.png">
   <style>
-  /* ========== Font ========== */
+  /* Font */
   @font-face{
     font-family:'NeoDunggeunmo';
     src:url('./NeoDunggeunmoPro-Regular.ttf') format('truetype');
     font-weight:400;font-style:normal;font-display:swap;
   }
 
-  /* ========== Theme ========== */
+  /* Theme */
   :root{
     --font:'NeoDunggeunmo', ui-monospace, "Courier New", monospace;
     --bg:#000; --txt:#e9ecef; --mut:#9aa0a6;
@@ -22,84 +22,82 @@
     --maxw:1000px; --gap:16px; --radius:14px;
   }
   *{box-sizing:border-box} html,body{height:100%}
-  body{margin:0;font-family:var(--font);background:var(--bg);color:var(--txt);line-height:1.6}
+  body{
+    margin:0; font-family:var(--font); background:var(--bg); color:var(--txt);
+    line-height:1.6; font-size:14px;   /* 전체 폰트 크기 소폭 축소 */
+  }
 
-  /* ========== Splash (풀 HUD) ========== */
+  /* Splash (풀 HUD) */
   #splash{position:fixed; inset:0; z-index:9999; background:#000; display:grid; place-items:center}
   .sp-frame{width:min(920px,96vw); border:2px solid #F25555; border-radius:14px; padding:18px; background:#000; box-shadow:0 0 22px rgba(0,0,0,.5), inset 0 0 20px rgba(0,0,0,.35)}
-  .sp-brand{font-size:28px; color:#F25555; text-align:center}
-  .sp-sub{color:#E08A8A; text-align:center; margin:4px 0 10px}
-  .sp-hud{display:flex;gap:12px;justify-content:space-between;border:2px solid #F25555;border-radius:10px;padding:8px 10px;margin:8px 0 12px}
-  .sp-panel{border:2px solid #F25555;border-radius:12px;padding:14px}
-  .sp-stage{font-size:26px;text-align:center;color:#F25555}
-  .sp-pct{color:#E08A8A;text-align:center;margin-bottom:6px}
-  .sp-meter{height:14px;border:2px solid #F25555;border-radius:10px;overflow:hidden}
+  .sp-brand{font-size:24px; color:#F25555; text-align:center}
+  .sp-sub{color:#E08A8A; text-align:center; margin:4px 0 10px; font-size:12px}
+  .sp-hud{display:flex;gap:12px;justify-content:space-between;border:2px solid #F25555;border-radius:10px;padding:8px 10px;margin:8px 0 12px;font-size:12px}
+  .sp-panel{border:2px solid #F25555;border-radius:12px;padding:12px}
+  .sp-stage{font-size:20px;text-align:center;color:#F25555}
+  .sp-pct{color:#E08A8A;text-align:center;margin-bottom:6px;font-size:12px}
+  .sp-meter{height:12px;border:2px solid #F25555;border-radius:10px;overflow:hidden}
   .sp-meter>i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#E04B4B,#F25555)}
-  .sp-log{font-size:13px;background:#000;border:1px dashed rgba(242,85,85,.35);border-radius:10px;padding:10px;min-height:70px;color:#ffdcdc}
+  .sp-log{font-size:12px;background:#000;border:1px dashed rgba(242,85,85,.35);border-radius:10px;padding:8px;min-height:60px;color:#ffdcdc}
 
-  /* ========== Layout ========== */
-  header{position:sticky;top:0;z-index:10;background:linear-gradient(#19080b,#120508);border-bottom:1px solid var(--red2);padding:10px 14px;box-shadow:inset 0 -2px 0 0 #000}
-  .topbar{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;gap:12px;justify-content:space-between}
-  h1{margin:0;font-size:18px;color:#fff}
+  /* Layout */
+  header{position:sticky;top:0;z-index:10;background:linear-gradient(#19080b,#120508);border-bottom:1px solid var(--red2);padding:8px 12px;box-shadow:inset 0 -2px 0 0 #000}
+  .topbar{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;gap:10px;justify-content:space-between}
+  h1{margin:0;font-size:16px;color:#fff}
   .nav{display:flex;gap:8px;flex-wrap:wrap}
-  .btn{appearance:none;border:1px solid var(--red2);background:linear-gradient(#16060a,#100408);color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer}
+  .btn{appearance:none;border:1px solid var(--red2);background:linear-gradient(#16060a,#100408);color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:12px}
   .btn--link{color:#fff;text-decoration:none}
   .btn:focus-visible{outline:2px solid var(--red)}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:18px;display:grid;gap:18px}
-  .section{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:inset 0 0 0 2px #000}
-  .sec-title{margin:0 0 12px;font-size:18px;color:#fff;letter-spacing:.2px;display:flex;align-items:center;gap:8px}
 
-  /* 포켓몬볼 아이콘 (섹션 타이틀 옆) */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:16px;display:grid;gap:16px}
+  .section{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:inset 0 0 0 2px #000}
+  .sec-title{margin:0 0 10px;font-size:16px;color:#fff;letter-spacing:.2px;display:flex;align-items:center;gap:8px}
+
+  /* 포켓몬볼 아이콘 */
   .pb{width:14px;height:14px;border-radius:50%;position:relative;display:inline-block;flex:0 0 14px;
       background:linear-gradient(#e33 0 50%, #fff 50% 100%); border:1px solid #000; box-shadow:inset 0 -1px 0 #000, inset 0 1px 0 #000}
   .pb::before{content:"";position:absolute;left:-1px;right:-1px;top:calc(50% - 1px);height:2px;background:#000}
   .pb::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:6px;height:6px;background:#bbb;border:2px solid #000;border-radius:50%}
 
-  .card{background:#0a0b0d;border:1px solid var(--line);border-radius:12px;padding:14px;box-shadow:inset 0 0 0 2px #000}
-  .card h3{margin:0 0 8px;font-size:16px}
-  .muted{color:var(--mut)}
+  .card{background:#0a0b0d;border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:inset 0 0 0 2px #000}
+  .card h3{margin:0 0 6px;font-size:14px}
+  .muted{color:var(--mut);font-size:13px}
 
   /* Profile */
-  .profile-grid{display:grid;grid-template-columns:140px 1fr;gap:14px;align-items:start}
+  .profile-grid{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:start}
   @media (max-width:720px){.profile-grid{grid-template-columns:1fr}}
-  .avatar{width:100%;height:140px;border:1px solid var(--line);border-radius:12px;background:#07080a;display:grid;place-items:center;overflow:hidden;position:relative}
+  .avatar{width:100%;height:120px;border:1px solid var(--line);border-radius:12px;background:#07080a;display:grid;place-items:center;overflow:hidden;position:relative}
   .avatar img{width:100%;height:100%;object-fit:cover}
   .avatar::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
-  .pill{display:inline-flex;gap:6px;align-items:center;padding:3px 8px;border:1px solid rgba(255,120,120,.5);background:rgba(255,47,62,.12);border-radius:999px;font-size:12px;color:#ffd7dc;width:max-content}
+  .pill{display:inline-flex;gap:6px;align-items:center;padding:2px 6px;border:1px solid rgba(255,120,120,.5);background:rgba(255,47,62,.12);border-radius:999px;font-size:11px;color:#ffd7dc;width:max-content}
 
   /* Story grid */
-  .story-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+  .story-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
   @media (max-width:860px){.story-grid{grid-template-columns:1fr}}
 
-  /* ===== 포켓몬 대사창 (각진 + 얇은 테두리 + ▼) ===== */
+  /* 포켓몬 대사창 (각진 + 2px + ▼) */
   .dialog{
-    position:relative;
-    padding:14px 16px 16px;
+    position:relative; padding:12px 14px 14px;
     background:linear-gradient(180deg,#101217,#0b0d12);
-    border:2px solid #e9ecef;   /* 살짝 얇게 */
-    border-radius:0;            /* 각진 모서리 */
-    box-shadow:inset 0 0 0 2px #000, 0 0 0 2px #000;
+    border:2px solid #e9ecef; border-radius:0;
+    box-shadow:inset 0 0 0 2px #000, 0 0 0 2px #000; font-size:14px;
   }
   .dialog[data-speaker]::before{
     content:attr(data-speaker);
     position:absolute; top:-12px; left:12px;
-    font-size:12px; color:#000; background:#e9ecef;
-    border:2px solid #000; border-radius:6px; padding:0 6px;
-    line-height:18px; height:18px;
+    font-size:11px; color:#000; background:#e9ecef;
+    border:2px solid #000; border-radius:6px; padding:0 6px; line-height:16px; height:16px;
   }
-  .dialog .tri{
-    position:absolute; right:10px; bottom:8px;
-    font-size:14px; line-height:1; color:#ff2f3e; /* ▼ 색상 */
-  }
+  .dialog .tri{position:absolute; right:10px; bottom:8px; font-size:14px; line-height:1; color:#ff2f3e}
 
   /* 선택지 */
-  .choices{display:grid;gap:12px;margin-top:12px}
-  .choice{display:flex;gap:10px;align-items:flex-start}
-  .choice .arrow{color:#ff616d;line-height:1.4;font-size:16px}
-  .choices-intro{margin:2px 0 4px;color:var(--mut);font-size:14px}
+  .choices{display:grid;gap:10px;margin-top:10px}
+  .choice{display:flex;gap:8px;align-items:flex-start}
+  .choice .arrow{color:#ff616d;line-height:1.4;font-size:14px}
+  .choices-intro{margin:2px 0 2px;color:var(--mut);font-size:13px}
 
   /* Specimen (Hisui Zoroark) */
-  .spec{display:grid;grid-template-rows:240px auto;gap:10px}
+  .spec{display:grid;grid-template-rows:220px auto;gap:8px}
   .spec-fig{position:relative;border:1px solid #22272f;border-radius:12px;background:#06070a;display:grid;place-items:center;overflow:hidden}
   .spec-fig::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
   .spec-fig img{max-width:100%;max-height:100%;object-fit:contain}
@@ -109,7 +107,7 @@
   .t-ghost{background:#735797;color:#fff;border-color:#5c467a}
 
   /* Epilogue grid */
-  .epilogue-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .epilogue-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   @media (max-width:860px){.epilogue-grid{grid-template-columns:1fr}}
   </style>
 </head>
@@ -133,8 +131,8 @@
     <div class="topbar">
       <h1>WHITE BOX — Story</h1>
       <nav class="nav" aria-label="바로가기">
-        <a class="btn btn--link" href="index.html" aria-current="page">스토리</a>
-        <a class="btn btn--link" href="box.html">포켓몬 박스</a>
+        <a class="btn btn--link" href="./index.html" aria-current="page">스토리</a>
+        <a class="btn btn--link" href="./box.html">포켓몬 박스</a>
       </nav>
     </div>
   </header>
@@ -145,11 +143,12 @@
       <h2 class="sec-title"><span class="pb" aria-hidden="true"></span>WHITE / 29 (BW)</h2>
       <div class="profile-grid">
         <div class="avatar">
-          <img src="white.png" alt="연구원 화이트 사진" onerror="this.onerror=null;this.src='pp.png'">
+          <!-- 요청: 프로필 이미지 OP.png -->
+          <img src="OP.png" alt="연구원 화이트 사진" onerror="this.onerror=null;this.src='pp.png'">
         </div>
         <div>
           <span class="pill">RESEARCHER • BLACK CITY</span>
-          <div class="card" style="margin-top:10px">
+          <div class="card" style="margin-top:8px">
             <h3>개요</h3>
             <ul>
               <li>블랙 버전에만 출연한다 – 플레이어에게 조로아를 선물해주고 떠나는 단역.</li>
@@ -167,13 +166,13 @@
       <h2 class="sec-title"><span class="pb" aria-hidden="true"></span>스토리</h2>
       <div class="story-grid">
         <div class="card">
-          <!-- 대사창 (각진/얇은/▼) -->
+          <!-- 대사창 -->
           <div class="dialog" data-speaker="WHITE">
             <p>“괜찮다면 당신의 포켓몬을 <b>완벽하게</b> 해 드리지요.”</p>
             <span class="tri" aria-hidden="true">▼</span>
           </div>
 
-      
+          <!-- 안내 문구 + 선택지 -->
           <div class="choices">
             <p class="choices-intro">
               포켓몬스터 B/W 블랙시티에서 조우 가능하다.<br>
@@ -197,7 +196,7 @@
           </div>
         </div>
 
-        <!-- 히스이 조로아크 정보 박스 -->
+        <!-- 히스이 조로아크 -->
         <div class="card spec">
           <div class="spec-fig">
             <img alt="히스이 조로아크"
@@ -205,8 +204,9 @@
                  onerror="this.onerror=null;this.src='i.png'">
           </div>
           <div>
-            <p><b>블랙시티</b>에서 <b>Lv.15</b>일 때 <b>연구원 화이트</b>에게서 받았다. 말수가 적은 어린아이 모습으로 둔갑해 지내는 경우가 많다. 화이트의 어린 시절을 흉내 내는 것 같다.</p>
-            <div class="chipset" style="margin:8px 0">
+            <!-- 요청: 블랙시티/Lv.15 볼드 제거, ‘연구원 화이트’만 볼드 -->
+            <p>블랙시티에서 Lv.15일 때 <b>연구원 화이트</b>에게서 받았다. 말수가 적은 어린아이 모습으로 둔갑해 지내는 경우가 많다. 화이트의 어린 시절을 흉내 내는 것 같다.</p>
+            <div class="chipset" style="margin:6px 0">
               <span class="type t-normal">노말</span>
               <span class="type t-ghost">고스트</span>
             </div>
@@ -222,8 +222,9 @@
       <div class="epilogue-grid">
         <div class="card">
           <h3>다음 시즌 안내</h3>
-          <p>다음 시즌인 <b>B·W 2</b>에서 화이트를 다시 만나 그동안 키운 <b>조로아(조로아크)</b>를 돌려줄 수 있다.</p>
-          <p>이제는 실험대상이 아닌 <b>‘파트너’</b>로 잘 키워보겠다며 고맙다는 인사와 함께 퇴장. 받는 건 없지만 플레이어는 기분이 좋아진다. (…)</p>
+          <!-- 요청: 볼드 제거 -->
+          <p>다음 시즌인 B·W 2에서 화이트를 다시 만나 그동안 키운 조로아(조로아크)를 돌려줄 수 있다.</p>
+          <p>이제는 실험대상이 아닌 ‘파트너’로 잘 키워보겠다며 고맙다는 인사와 함께 퇴장. 받는 건 없지만 플레이어는 기분이 좋아진다. (…)</p>
         </div>
         <div class="card">
           <h3>시리즈의 본질</h3>
@@ -234,7 +235,7 @@
   </main>
 
   <script>
-
+  // Splash 진행
   (function(){
     const el=document.getElementById('splash');
     const bar=document.getElementById('sp-bar');
@@ -243,7 +244,7 @@
     const log=document.getElementById('sp-log');
     const STAGES=["INITIALIZING","AUTHENTICATING","OPENING POKÉMON BOX","DECRYPTING","INDEXING","VALIDATING","COMPILING","FINALIZING"];
     const LOGS=["> Opening Pokémon Box…","> Scanning crates…","> Decrypting research data…","> Indexing specimen files…","> Syncing field notes…","> Consolidating metadata…"];
-    const start=performance.now(), D=4000;
+    const start=performance.now(), D=3600;
     (function step(t){
       const p=Math.min(1,(t-start)/D), n=Math.round(p*100);
       bar.style.width=n+"%"; pct.textContent=n+"%";

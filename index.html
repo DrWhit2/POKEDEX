@@ -1,587 +1,257 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<link rel="icon" type="image/png" href="pp.png">  
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Pokémon Box</title>
-<style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>WHITE BOX — Story</title>
+  <link rel="icon" type="image/png" href="pp.png">
+  <style>
+  /* ========== Font ========== */
+  @font-face{
+    font-family:'NeoDunggeunmo';
+    src:url('./NeoDunggeunmoPro-Regular.ttf') format('truetype');
+    font-weight:400;font-style:normal;font-display:swap;
+  }
 
-@font-face{font-family:'NeoDunggeunmo';src:url('./NeoDunggeunmoPro-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:'Galmuri11';src:url('./Galmuri11.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:'Galmuri11-Bold';src:url('./Galmuri11-Bold.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap}
-@font-face{font-family:'Galmuri11-Condensed';src:url('./Galmuri11-Condensed.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+  /* ========== Theme ========== */
+  :root{
+    --font:'NeoDunggeunmo', ui-monospace, "Courier New", monospace;
+    --bg:#000; --txt:#e9ecef; --mut:#9aa0a6;
+    --panel:#0b0c10; --panel2:#0f1013; --line:#242933;
+    --red:#ff2f3e; --red2:#3a0a0f;
+    --maxw:1000px; --gap:16px; --radius:14px;
+  }
+  *{box-sizing:border-box} html,body{height:100%}
+  body{margin:0;font-family:var(--font);background:var(--bg);color:var(--txt);line-height:1.6}
 
+  /* ========== Splash (풀 HUD) ========== */
+  #splash{position:fixed; inset:0; z-index:9999; background:#000; display:grid; place-items:center}
+  .sp-frame{width:min(920px,96vw); border:2px solid #F25555; border-radius:14px; padding:18px; background:#000; box-shadow:0 0 22px rgba(0,0,0,.5), inset 0 0 20px rgba(0,0,0,.35)}
+  .sp-brand{font-size:28px; color:#F25555; text-align:center}
+  .sp-sub{color:#E08A8A; text-align:center; margin:4px 0 10px}
+  .sp-hud{display:flex;gap:12px;justify-content:space-between;border:2px solid #F25555;border-radius:10px;padding:8px 10px;margin:8px 0 12px}
+  .sp-panel{border:2px solid #F25555;border-radius:12px;padding:14px}
+  .sp-stage{font-size:26px;text-align:center;color:#F25555}
+  .sp-pct{color:#E08A8A;text-align:center;margin-bottom:6px}
+  .sp-meter{height:14px;border:2px solid #F25555;border-radius:10px;overflow:hidden}
+  .sp-meter>i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#E04B4B,#F25555)}
+  .sp-log{font-size:13px;background:#000;border:1px dashed rgba(242,85,85,.35);border-radius:10px;padding:10px;min-height:70px;color:#ffdcdc}
 
-:root{
-  --font-body:'NeoDunggeunmo', ui-monospace, "Courier New", monospace;
-  --font-ui:'Galmuri11', var(--font-body);
-  --font-ui-bold:'Galmuri11-Bold', var(--font-ui);
-  --font-cond:'Galmuri11-Condensed', var(--font-ui);
-  --w:1000px; --gap:12px;
+  /* ========== Layout ========== */
+  header{position:sticky;top:0;z-index:10;background:linear-gradient(#19080b,#120508);border-bottom:1px solid var(--red2);padding:10px 14px;box-shadow:inset 0 -2px 0 0 #000}
+  .topbar{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;gap:12px;justify-content:space-between}
+  h1{margin:0;font-size:18px;color:#fff}
+  .nav{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{appearance:none;border:1px solid var(--red2);background:linear-gradient(#16060a,#100408);color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer}
+  .btn--link{color:#fff;text-decoration:none}
+  .btn:focus-visible{outline:2px solid var(--red)}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:18px;display:grid;gap:18px}
+  .section{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:inset 0 0 0 2px #000}
+  .sec-title{margin:0 0 12px;font-size:18px;color:#fff;letter-spacing:.2px;display:flex;align-items:center;gap:8px}
 
-  --bg:#000000;
-  --panel:#0a0b0d; --panel-2:#0f1013;
-  --line:#2a2d33; --txt:#e9ecef; --mut:#9aa0a6;
-  --red:#ff2f3e; --red-border:#3a0a0f; --scan-alpha:.08;
-}
-*{box-sizing:border-box} html,body{height:100%}
-body{
-  margin:0;font-family:var(--font-body);color:var(--txt);background:var(--bg);
-  -webkit-font-smoothing:none;text-rendering:optimizeSpeed;line-height:1.4
-}
-body::before{ content:none !important; }
+  /* 포켓몬볼 아이콘 (섹션 타이틀 옆) */
+  .pb{width:14px;height:14px;border-radius:50%;position:relative;display:inline-block;flex:0 0 14px;
+      background:linear-gradient(#e33 0 50%, #fff 50% 100%); border:1px solid #000; box-shadow:inset 0 -1px 0 #000, inset 0 1px 0 #000}
+  .pb::before{content:"";position:absolute;left:-1px;right:-1px;top:calc(50% - 1px);height:2px;background:#000}
+  .pb::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:6px;height:6px;background:#bbb;border:2px solid #000;border-radius:50%}
 
-.wrap{position:relative;z-index:1;max-width:var(--w);margin:0 auto;padding:16px;display:grid;grid-template-rows:auto 1fr;gap:var(--gap)}
+  .card{background:#0a0b0d;border:1px solid var(--line);border-radius:12px;padding:14px;box-shadow:inset 0 0 0 2px #000}
+  .card h3{margin:0 0 8px;font-size:16px}
+  .muted{color:var(--mut)}
 
-  
-header{position:sticky;top:0;z-index:5;background:linear-gradient(#21080b,#160508);border:1px solid var(--red-border);padding:10px 12px;box-shadow:inset 0 0 0 2px #000}
-header .title{display:flex;align-items:center;gap:12px;letter-spacing:1px}
-header h1{margin:0;font-size:18px;color:#fff;text-transform:none;font-family:var(--font-ui-bold)}
-.ball{width:18px;height:18px;position:relative;display:inline-block;border-radius:50%;
-  background:linear-gradient(#e33 0 50%,#fff 0 100%);border:2px solid #000;box-shadow:0 0 0 1px #333 inset}
-.ball::before{content:"";position:absolute;left:-2px;right:-2px;top:50%;height:2px;background:#000;transform:translateY(-50%)}
-.ball::after{content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;background:#bbb;border:2px solid #000;border-radius:50%;
-  transform:translate(-50%,-50%)}
-.ball.mini{width:12px;height:12px}.ball.mini::after{width:4px;height:4px}
+  /* Profile */
+  .profile-grid{display:grid;grid-template-columns:140px 1fr;gap:14px;align-items:start}
+  @media (max-width:720px){.profile-grid{grid-template-columns:1fr}}
+  .avatar{width:100%;height:140px;border:1px solid var(--line);border-radius:12px;background:#07080a;display:grid;place-items:center;overflow:hidden;position:relative}
+  .avatar img{width:100%;height:100%;object-fit:cover}
+  .avatar::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
+  .pill{display:inline-flex;gap:6px;align-items:center;padding:3px 8px;border:1px solid rgba(255,120,120,.5);background:rgba(255,47,62,.12);border-radius:999px;font-size:12px;color:#ffd7dc;width:max-content}
 
+  /* Story grid */
+  .story-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+  @media (max-width:860px){.story-grid{grid-template-columns:1fr}}
 
-.layout{display:grid;grid-template-columns:1fr;column-gap:var(--gap);row-gap:0}
-@media(min-width:860px){.layout{grid-template-columns:1fr 460px}}
+  /* ===== 포켓몬 대사창 (각진 + 얇은 테두리 + ▼) ===== */
+  .dialog{
+    position:relative;
+    padding:14px 16px 16px;
+    background:linear-gradient(180deg,#101217,#0b0d12);
+    border:2px solid #e9ecef;   /* 살짝 얇게 */
+    border-radius:0;            /* 각진 모서리 */
+    box-shadow:inset 0 0 0 2px #000, 0 0 0 2px #000;
+  }
+  .dialog[data-speaker]::before{
+    content:attr(data-speaker);
+    position:absolute; top:-12px; left:12px;
+    font-size:12px; color:#000; background:#e9ecef;
+    border:2px solid #000; border-radius:6px; padding:0 6px;
+    line-height:18px; height:18px;
+  }
+  .dialog .tri{
+    position:absolute; right:10px; bottom:8px;
+    font-size:14px; line-height:1; color:#ff2f3e; /* ▼ 색상 */
+  }
 
+  /* 선택지 */
+  .choices{display:grid;gap:12px;margin-top:12px}
+  .choice{display:flex;gap:10px;align-items:flex-start}
+  .choice .arrow{color:#ff616d;line-height:1.4;font-size:16px}
+  .choices-intro{margin:2px 0 4px;color:var(--mut);font-size:14px}
 
-.dex{background:var(--panel);border:1px solid var(--line);padding:var(--gap);position:relative;overflow:hidden}
-.group{color:var(--mut);font-size:12px;margin:4px 0 8px;display:flex;align-items:center;gap:8px;font-family:var(--font-ui)}
-.group::before,.group::after{content:'';height:1px;background:var(--line);flex:1}
-.group-wish{margin:22px 0 14px} #grid-wish{margin-bottom:24px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gap)}
-@media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(min-width:980px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  /* Specimen (Hisui Zoroark) */
+  .spec{display:grid;grid-template-rows:240px auto;gap:10px}
+  .spec-fig{position:relative;border:1px solid #22272f;border-radius:12px;background:#06070a;display:grid;place-items:center;overflow:hidden}
+  .spec-fig::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
+  .spec-fig img{max-width:100%;max-height:100%;object-fit:contain}
+  .chipset{display:flex;gap:6px 8px;flex-wrap:wrap}
+  .type{font-size:11px;padding:0 7px;line-height:1.35;border-radius:999px;border:1px solid #303643;background:#0c0e12}
+  .t-normal{background:#A8A77A;color:#111;border-color:#8a8b5f}
+  .t-ghost{background:#735797;color:#fff;border-color:#5c467a}
 
-.mon-card{
-  position:relative;background:linear-gradient(180deg,var(--panel-2),#0a0b0d);
-  border:1px solid var(--line);padding:10px;display:grid;grid-template-rows:88px auto;gap:8px;
-  cursor:pointer;image-rendering:pixelated;transition:transform .08s,border-color .08s;box-shadow:inset 0 0 0 2px #000
-}
-.mon-card::after{content:"";position:absolute;right:6px;top:6px;width:18px;height:18px;border-right:2px solid var(--red);border-top:2px solid var(--red);
-  filter:drop-shadow(0 0 6px rgba(255,47,62,.35))}
-.mon-card:hover{transform:translateY(-1px);border-color:#3d424a}
-.mon-card[aria-selected="true"]{outline:1px solid var(--red);outline-offset:-1px;box-shadow:0 0 18px rgba(255,47,62,.35)}
-.mon-card.wish{border-style:dashed;border-color:#3a3f46}
-
-.sprite{background:#07080a;border:1px solid var(--line);display:grid;place-items:center;font-size:12px;color:#9aa0a6;position:relative;overflow:hidden}
-.sprite::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,var(--scan-alpha)) 0 1px,transparent 1px 3px);mix-blend-mode:overlay;pointer-events:none}
-.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 8px;align-items:center}
-.no{font-size:11px;color:#9aa0a6}
-.name{font-size:13px;color:#e9ecef;letter-spacing:.3px;font-family:var(--font-ui)}
-.types{grid-column:1/-1;display:flex;gap:4px;flex-wrap:wrap}
-
-/* type chips */
-.type{font-size:9px;padding:0 4px;line-height:1.1;border:1px solid var(--line);background:#0b0d10;color:#eaeaea;letter-spacing:.2px;font-family:var(--font-ui)}
-.type.t-normal{background:#A8A77A;color:#111;border-color:#8a8b5f}
-.type.t-fire{background:#EE8130;color:#111;border-color:#c86627}
-.type.t-water{background:#6390F0;color:#111;border-color:#4f73c3}
-.type.t-electric{background:#F7D02C;color:#111;border-color:#d1b122}
-.type.t-grass{background:#7AC74C;color:#111;border-color:#5da23b}
-.type.t-ice{background:#96D9D6;color:#111;border-color:#78b9b6}
-.type.t-fighting{background:#C22E28;color:#fff;border-color:#9b2420}
-.type.t-poison{background:#A33EA1;color:#fff;border-color:#822f81}
-.type.t-ground{background:#E2BF65;color:#111;border-color:#bf9f53}
-.type.t-flying{background:#A98FF3;color:#111;border-color:#8a71d0}
-.type.t-psychic{background:#F95587;color:#111;border-color:#cc466f}
-.type.t-bug{background:#A6B91A;color:#111;border-color:#889611}
-.type.t-rock{background:#B6A136;color:#111;border-color:#94822b}
-.type.t-ghost{background:#735797;color:#fff;border-color:#5c467a}
-.type.t-dragon{background:#6F35FC;color:#fff;border-color:#582acb}
-.type.t-dark{background:#705746;color:#fff;border-color:#5a4638}
-.type.t-steel{background:#B7B7CE;color:#111;border-color:#9696ad}
-.type.t-fairy{background:#D685AD;color:#111;border-color:#b46c8f}
-.type.t-unknown{background:#555;color:#eee;border-color:#444}
-
-
-.details{
-  background:var(--panel);border:1px solid var(--line);
-  display:grid;grid-template-rows:auto auto 1fr auto;gap:6px;
-  padding:var(--gap);position:sticky;top:60px;height:max-content;overflow:hidden
-}
-@media(max-width:859.98px){.details{position:static}}
-
-.tabs{display:flex;gap:8px}
-.tab-btn{appearance:none;border:1px solid var(--red-border);background:linear-gradient(#1a070a,#120408);color:#fff;
-  font-family:var(--font-ui);font-size:12px;letter-spacing:.6px;padding:6px 10px;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:inset 0 0 0 2px #000}
-.tab-btn[aria-selected="true"]{background:#24060a;outline:1px solid var(--red);outline-offset:-1px;box-shadow:0 0 18px rgba(255,47,62,.35)}
-.tab-btn:disabled{opacity:.45;pointer-events:none}
-
-
-.screen{border:1px solid var(--line);background:#07090c;padding:12px 14px;min-height:300px;display:grid;gap:10px;grid-template-rows:auto 1fr;position:relative;overflow:hidden}
-.screen::after{content:"";position:absolute;inset:-40% -10%;background:linear-gradient(90deg,transparent,rgba(220,220,220,.08),transparent);transform:translateX(-100%) rotate(8deg);animation:sweep 6s linear infinite;pointer-events:none}
-@keyframes sweep{to{transform:translateX(100%) rotate(8deg)}}
-
-.big{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:start}
-@media(max-width:420px){.big{grid-template-columns:1fr}}
-.big .sprite{height:120px}
-.big h2{margin:0;font-size:18px;font-family:var(--font-ui)}
-.big .id{font-size:12px;color:#9aa0a6;margin-bottom:8px}
-.hr{height:1px;background:var(--line);margin:6px 0}
-.kv{display:grid;grid-template-columns:58px 1fr;column-gap:4px;row-gap:4px;align-items:start}
-.kv .k{color:#9aa0a6;font-size:13px;text-align:left;padding-left:6px;font-family:var(--font-ui)}
-.kv .v{color:#e9ecef;font-size:13px;word-break:keep-all;overflow-wrap:break-word}
-
-
-.extra-box{position:relative;border:1px solid var(--line);background:#090a0d;min-height:140px;overflow:auto;}
-.extra-box::before,.extra-box::after{display:none!important}
-.extra-box .placeholder{color:#cfd3d7;font-size:13px;padding:10px}
-
-
-.hudx-wrap{margin-top:6px}
-.hudx-panel{--hudx-h:130px;position:relative;height:var(--hudx-h);
-  border:1px solid rgba(255,47,62,.35);background:linear-gradient(180deg,#090a0c,#050607);
-  box-shadow:inset 0 0 0 1px #000,0 0 24px rgba(255,47,62,.08);overflow:hidden}
-#hudx-cv{position:absolute;inset:8px;width:calc(100% - 16px);height:calc(var(--hudx-h) - 16px)}
-.hudx-overlay{position:absolute;left:12px;right:12px;top:8px;display:flex;justify-content:space-between;align-items:center;
-  font:11px var(--font-cond);color:rgba(255,210,210,.95);letter-spacing:.5px;text-shadow:0 0 8px rgba(255,47,62,.25);pointer-events:none}
-.hudx-title{display:flex;gap:8px;align-items:center}
-.hudx-badge{font-size:10px;padding:2px 6px;border:1px solid rgba(255,120,120,.5);color:#ffdcdc;font-family:var(--font-ui)}
-.hudx-types{display:flex;gap:4px;flex-wrap:wrap}
-.hudx-chip{font-size:9px;padding:1px 5px;border:1px solid rgba(255,120,120,.4);background:rgba(255,47,62,.15);color:#ffeaea;font-family:var(--font-ui)}
-
-button{-webkit-tap-highlight-color:transparent}
-[hidden]{display:none!important}
-
-  
-#splash{
-  position:fixed; inset:0; z-index:9999; background:#000;
-  display:grid; place-items:center; font-family:var(--font-ui);  /* 폰트 적용 */
-}
-.sp-frame{width:min(920px,96vw); border:2px solid #F25555; border-radius:14px; padding:18px; background:#000;
-  box-shadow:0 0 22px rgba(0,0,0,.5), inset 0 0 20px rgba(0,0,0,.35)}
-.sp-brand{font-family:var(--font-ui-bold); font-size:28px; color:#F25555; text-align:center}
-.sp-sub{color:#E08A8A; text-align:center; margin:4px 0 10px; font-family:var(--font-ui)}
-.sp-hud{display:flex;gap:12px;justify-content:space-between;border:2px solid #F25555;border-radius:10px;padding:8px 10px;margin:8px 0 12px; font-family:var(--font-ui)}
-.sp-panel{border:2px solid #F25555;border-radius:12px;padding:14px}
-.sp-stage{font-size:26px;text-align:center;color:#F25555; font-family:var(--font-ui-bold)}
-.sp-pct{color:#E08A8A;text-align:center;margin-bottom:6px; font-family:var(--font-ui)}
-.sp-meter{height:14px;border:2px solid #F25555;border-radius:10px;overflow:hidden}
-.sp-meter>i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#E04B4B,#F25555)}
-.sp-log{font-size:13px;background:#000;border:1px dashed rgba(242,85,85,.35);border-radius:10px;padding:10px;min-height:70px;color:#ffdcdc; font-family:var(--font-ui)}
-</style>
+  /* Epilogue grid */
+  .epilogue-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media (max-width:860px){.epilogue-grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
-
-
-<section id="splash" aria-hidden="true">
-  <div class="sp-frame">
-    <div class="sp-brand">WHITE BOX</div>
-    <div class="sp-sub">POKÉMON BOX – RESEARCH DATA ARCHIVE</div>
-    <div class="sp-hud"><div>PROJECT: POKÉMON BOX</div><div>RESEARCHER: WHITE</div><div>STATUS: ONLINE</div></div>
-    <div class="sp-panel">
-      <div class="sp-stage" id="sp-stage">INITIALIZING</div>
-      <div class="sp-pct" id="sp-pct">0%</div>
-      <div class="sp-meter"><i id="sp-bar"></i></div>
-      <div class="sp-log" id="sp-log">&gt; Opening Pokémon Box…</div>
+  <!-- Splash -->
+  <section id="splash" aria-hidden="true">
+    <div class="sp-frame">
+      <div class="sp-brand">WHITE BOX</div>
+      <div class="sp-sub">POKÉMON BOX – RESEARCH DATA ARCHIVE</div>
+      <div class="sp-hud"><div>PROJECT: POKÉMON BOX</div><div>RESEARCHER: WHITE</div><div>STATUS: ONLINE</div></div>
+      <div class="sp-panel">
+        <div class="sp-stage" id="sp-stage">INITIALIZING</div>
+        <div class="sp-pct" id="sp-pct">0%</div>
+        <div class="sp-meter"><i id="sp-bar"></i></div>
+        <div class="sp-log" id="sp-log">&gt; Opening Pokémon Box…</div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<div class="wrap">
   <header>
-    <div class="title"><span class="ball" aria-hidden="true"></span><h1>Pokémon Data Archive – White</h1></div>
+    <div class="topbar">
+      <h1>WHITE BOX — Story</h1>
+      <nav class="nav" aria-label="바로가기">
+        <a class="btn btn--link" href="index.html" aria-current="page">스토리</a>
+        <a class="btn btn--link" href="box.html">포켓몬 박스</a>
+      </nav>
+    </div>
   </header>
 
-  <main class="layout" id="app" aria-live="polite">
- 
-    <section class="dex" aria-label="포켓몬 목록">
-      <h3 class="group">보유 포켓몬</h3>
-      <div class="grid" id="grid-owned" role="list"></div>
-      <h3 class="group group-wish">위시 포켓몬</h3>
-      <div class="grid" id="grid-wish" role="list"></div>
+  <main class="wrap">
+    <!-- WHITE 프로필 -->
+    <section class="section">
+      <h2 class="sec-title"><span class="pb" aria-hidden="true"></span>WHITE / 29 (BW)</h2>
+      <div class="profile-grid">
+        <div class="avatar">
+          <img src="white.png" alt="연구원 화이트 사진" onerror="this.onerror=null;this.src='pp.png'">
+        </div>
+        <div>
+          <span class="pill">RESEARCHER • BLACK CITY</span>
+          <div class="card" style="margin-top:10px">
+            <h3>개요</h3>
+            <ul>
+              <li>블랙 버전에만 출연한다 – 플레이어에게 조로아를 선물해주고 떠나는 단역.</li>
+              <li>화이트: <q>진정한 유대는 포켓몬과의 감정교류가 아닌 유전자 프로그래밍에서 비롯됩니다</q></li>
+              <li>포켓몬의 유전자를 불법 조작하다 쫓겨난 연구원. 뮤를 이용한 복제·강화 실험에 관여했다는 소문이 돈다.</li>
+              <li>한때는 진화 연구의 선구자로 명성을 떨쳤지만, 지금은 학계와 포켓몬 리그에서 제명당한 과거 인물일 뿐…</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
 
+    <!-- 스토리 -->
+    <section class="section">
+      <h2 class="sec-title"><span class="pb" aria-hidden="true"></span>스토리</h2>
+      <div class="story-grid">
+        <div class="card">
+          <!-- 대사창 (각진/얇은/▼) -->
+          <div class="dialog" data-speaker="WHITE">
+            <p>“괜찮다면 당신의 포켓몬을 <b>완벽하게</b> 해 드리지요.”</p>
+            <span class="tri" aria-hidden="true">▼</span>
+          </div>
 
-    <aside class="details" aria-label="상세 정보">
-      <div class="tabs" role="tablist" aria-label="상세 탭">
-        <button class="tab-btn" id="tab-info" role="tab" aria-selected="true" aria-controls="panel-info"><span class="ball mini" aria-hidden="true"></span><span>도감설명</span></button>
-        <button class="tab-btn" id="tab-data" role="tab" aria-selected="false" aria-controls="panel-data"><span class="ball mini" aria-hidden="true"></span><span>데이터</span></button>
-      </div>
+      
+          <div class="choices">
+            <p class="choices-intro">
+              포켓몬스터 B/W 블랙시티에서 조우 가능하다.<br>
+              플레이어에게 파트너 포켓몬을 강화해 주겠다고 제안하며 이벤트가 시작된다. .
+            </p>
 
-
-      <div class="screen" id="panel-info" role="tabpanel" aria-labelledby="tab-info">
-        <div class="big">
-          <div class="sprite" id="info-sprite" title="클릭: 울음소리 재생">—</div>
-          <div>
-            <h2 id="info-name">—</h2>
-            <div class="id" id="info-id">NO.—</div>
-            <div class="hr"></div>
-            <div class="kv" id="info-kv">
-              <div class="k">타입</div><div class="v" id="info-types">—</div>
-              <div class="k">설명</div><div class="v" id="info-desc">—</div>
+            <div class="choice">
+              <span class="arrow">›</span>
+              <div>
+                <b>수락한다</b><br>
+                스타팅 포켓몬을 넘겨주는 대가로 <b>70,000</b>원을 받고 이벤트 종료
+              </div>
+            </div>
+            <div class="choice">
+              <span class="arrow">›</span>
+              <div>
+                <b>거절한다</b><br>
+                플레이어의 뒤를 몰래 따라다니기 시작. 포켓몬과의 교류를 관찰하는 모습을 보인다
+              </div>
             </div>
           </div>
         </div>
-        <div class="extra-box" id="info-extra"><div class="placeholder">포켓몬을 선택해주세요.</div></div>
-      </div>
 
-
-      <div class="screen" id="panel-data" role="tabpanel" aria-labelledby="tab-data" hidden>
-        <div class="big">
-          <div class="sprite" id="data-sprite" title="클릭: 울음소리 재생">DATA</div>
+        <!-- 히스이 조로아크 정보 박스 -->
+        <div class="card spec">
+          <div class="spec-fig">
+            <img alt="히스이 조로아크"
+                 src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/571-hisui.png"
+                 onerror="this.onerror=null;this.src='i.png'">
+          </div>
           <div>
-            <h2 id="data-name">—</h2>
-            <div class="id" id="data-id">NO.—</div>
-            <div class="hr"></div>
-            <div class="kv" id="data-kv">
-              <div class="k">만남</div><div class="v" id="data-met">—</div>
-              <div class="k">성격</div><div class="v" id="data-person">—</div>
+            <p><b>블랙시티</b>에서 <b>Lv.15</b>일 때 <b>연구원 화이트</b>에게서 받았다. 말수가 적은 어린아이 모습으로 둔갑해 지내는 경우가 많다. 화이트의 어린 시절을 흉내 내는 것 같다.</p>
+            <div class="chipset" style="margin:8px 0">
+              <span class="type t-normal">노말</span>
+              <span class="type t-ghost">고스트</span>
             </div>
-          </div>
-        </div>
-        <div class="extra-box" id="data-extra"><div class="placeholder">메모를 표시합니다.</div></div>
-      </div>
-
-
-      <div class="hudx-wrap">
-        <div class="hudx-panel">
-          <canvas id="hudx-cv"></canvas>
-          <div class="hudx-overlay">
-            <div class="hudx-title"><span class="hudx-badge" id="hudx-id">NO.—</span><span id="hudx-name">—</span></div>
-            <div class="hudx-types" id="hudx-types"></div>
+            <p class="muted">특성: 일루전 — 배틀 등장 시 상대 포켓몬의 외형을 모방한다.</p>
           </div>
         </div>
       </div>
-    </aside>
+    </section>
+
+    <!-- 에필로그 -->
+    <section class="section">
+      <h2 class="sec-title"><span class="pb" aria-hidden="true"></span>에필로그</h2>
+      <div class="epilogue-grid">
+        <div class="card">
+          <h3>다음 시즌 안내</h3>
+          <p>다음 시즌인 <b>B·W 2</b>에서 화이트를 다시 만나 그동안 키운 <b>조로아(조로아크)</b>를 돌려줄 수 있다.</p>
+          <p>이제는 실험대상이 아닌 <b>‘파트너’</b>로 잘 키워보겠다며 고맙다는 인사와 함께 퇴장. 받는 건 없지만 플레이어는 기분이 좋아진다. (…)</p>
+        </div>
+        <div class="card">
+          <h3>시리즈의 본질</h3>
+          <p class="muted">* 포켓몬 시리즈의 본질은 <q>좋아하는 포켓몬과 함께 모험을 한다</q>에 있지만, 스칼렛/바이올렛 출시 이후 좋은 개체치를 가진 포켓몬만 육성하고 나머지는 방출하는 행위가 반복되며… 이 이벤트가 다시금 재조명받게 됨.</p>
+        </div>
+      </div>
+    </section>
   </main>
-</div>
 
-  
-<audio id="cry-audio" preload="none"></audio>
+  <script>
 
-<script>
-
-const CRY_VOLUME = 0.35;  
-
-
-const SPR = 'https://play.pokemonshowdown.com/sprites/gen5/';
-const OA  = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
-
-const CRY_BASE = 'https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/';
-function playCryById(id){
-  const a=document.getElementById('cry-audio');
-  if(!id||!a) return;
-  a.src=`${CRY_BASE}${id}.ogg`;
-  a.volume = CRY_VOLUME;
-  a.play().catch(()=>{});
-}
-
-
-const owned = [
-  { id:570, name:'조로아', types:['노말','고스트'], sprite: SPR+'zorua-hisui.png',
-    desc:'사람이나 다른 포켓몬을 모방한다.',
-    met:'교류 연구로 확보한 히스이산 알을 인큐베이션 룸에서 부화했다.',
-    personality:'낯가림이 심하고 겁이 많다.',
-    memo:'상대와 똑 닮게 둔갑하여 속이거나 놀라게 해서 그 틈에 도망가는 일이 많다. 겁이 많은 포켓몬으로, 이는 자신의 상태를 숨겨 위험으로부터 몸을 지키기 위한 행동이다. 고독한 트레이너가 조로아크에게 환상을 명령해 외로움을 달랬다는 기록이 전해진다.',
-    dmem:'장난이 심해질 때를 대비해 “정지” 구호를 약속어로 정했다.' },
-
-  { id:81,  name:'코일', types:['전기','강철'], sprite: SPR+'magnemite.png',
-    desc:'공중에 뜬 채로 전기자석파를 방사한다.',
-    met:'공업 지대 변압 설비 상공에서 포획.',
-    personality:'조용하다.',
-    memo:'전선에 들러붙어 전기를 먹고 산다. 정전이 나면 누전차단기를 살펴보는 편이 좋다. 코일이 빽빽이 들러붙어 있을지도 모른다. 전선 지중화 이후에는 발전소를 찾는 개체가 늘었다. 체내 전기가 끊겨 땅에서 뒹굴 때 전지를 주면 다시 움직이기 시작한다.',
-    dmem:'장비 점검 루틴을 코일의 주기에 맞추자 오류율이 낮아졌다. 실험실 자계 안정 기준선으로 운용.' },
-
-  { id:600, name:'기기어르', types:['강철'], sprite: SPR+'klinklang.png',
-    desc:'정해진 조합의 두 개의 몸을 회전시켜 에너지를 만든다.',
-    met:'공업 지대에서 기어르를 확보해 장기 관찰 중 기기어르로 진화했다.',
-    personality:'침착하다.',
-    memo:' 두 개의 몸은 조합 방법이 정해져 있어 다른 몸과는 맞물리지 않고 떨어져 버린다. 먼 옛날 기어르를 본 사람이 톱니바퀴의 구조를 고안했다고 전해진다. 현재는 공업 기술의 상징으로 가라르의 여러 회사가 로고로 채택했다.',
-    dmem:'어쩌고' },
-
-  { id:137, name:'폴리곤', types:['노말'], sprite: SPR+'porygon.png',
-    desc:'연구 끝에 탄생한 인공 포켓몬이다. 기본적인 동작만 프로그램되어 있다..',
-    met:'테스트 서버의 비정상 이동 로그를 추적해 실체화를 성공했다.',
-    personality:'말수가 적다.',
-    memo:'몸이 프로그램으로 만들어져 전자공간을 자유자재로 이동할 수 있다. 근래에는 컴퓨터 공간을 순찰하며 수상한 데이터를 점검한다. 약 20년 전 과학 기술로 태어난 포켓몬이어서 현재 기준으로 뒤떨어진 부분도 있다.',
-    dmem:'PC 설계 오류 검출에 탁월해 검증 업무를 우선 배정했다. ' },
-
-  { id:474, name:'폴리곤Z', types:['노말'], sprite: SPR+'porygonz.png',
-    desc:'폴리곤2가 출처 불명의 비정품 업데이트를 받아 진화한 형태이다..',
-    met:'폴리곤에 비정품 업데이트가 적용된 뒤 변이로 발생했다.',
-    personality:'충동적.',
-    memo:'더 우월한 포켓몬을 목표로 추가한 프로그램에 문제가 있었는지 움직임이 괴상하다. 다른 차원을 자유롭게 이동하도록 프로그램을 수정했지만 실수한 듯하다. 부위들이 뒤틀려 있으며 초점을 잃은 눈동자가 특징이다.',
-    dmem:'실패의 증거로 보관하고 있다. 폐기 대신 격리 관찰 중.' },
-
-  { id:133, name:'이브이', types:['노말'], sprite: SPR+'eevee.png',
-    desc:'불규칙한 유전자를 가졌다. 돌에서 나오는 방사선에 의해 몸이 돌연 변이를 일으키기도.',
-    met:'연구실 후문 골목의 비에 젖은 상자에서 구조.',
-    personality:'소심하지만 호기심이 많다. 환경 변화에 예민하다.',
-    memo:'다양한 모습으로 진화할 가능성을 지녔다. 포켓몬 진화의 비밀을 푸는 열쇠가 이 몸 안에 있다고 여겨진다. 주위 영향에 민감한 유전자를 가져 보호자 얼굴을 닮아 간다는 보고가 있다. 지금까지 조사에 의하면 무려 8종류로 진화할 수 있다. ' },
-
-  { id:479, name:'로토무', types:['전기','고스트'], sprite: SPR+'rotom.png',
-    desc:'기기에 깃들어 형태를 바꾼다.',
-    met:'창고의 폐가전 군집에서 회수. 세정·절연 후 격리.',
-    personality:'호기심 많고 장난기 넘침.',
-    memo:'기기 내부 회로를 점유해 작동을 바꾸는 경우가 있어 연구 장비 접근 시 ESD 장갑과 절연 매트를 필수화. 동작 보이스가 스피커에 잔류하니 야간엔 전원을 분리한다.',
-    dmem:'전력 실험에 보조 투입. 감전 위험 경고 플로우를 SOP에 추가.' },
-
-  { id:649, name:'게노세크트', types:['벌레','강철'], sprite: SPR+'genesect.png',
-    desc:'3억 년 전에 있었던 포켓몬이다. 플라스마단에게 개조당해 등에 대포가 부착됐다.',
-    met:'폐쇄된 P2 연구소 구역의 냉각 포드에서 확보했다.',
-    personality:'규율적.',
-    memo:'특징을 한 단어로 압축하면 ‘사이보그’이다. 화석에서 부활해 개조된 고대 포켓몬이다. 이미 완전한 존재인 포켓몬에 인간 과학을 덧씌우는 행위에 반대한 N의 결정으로 프로젝트가 중지되고 시설이 폐기되었다. 개조 전 모습은 공개되지 않았다. .',
-    dmem:'어쩌고' },
-
-  { id:132, name:'메타몽', types:['노말'], sprite: SPR+'ditto.png',
-    desc:'전신이 점액질로 이루어진 포켓몬이다. 본 것을 그대로 변신하는 능력을 가졌다.',
-    met:'시약 보관고에서 젤상 물질을 분석하다 식별했다.',
-    personality:'무던하고 순응적.',
-    memo:'표정과 질감까지 높은 정밀도로 복제한다. 오래 같은 대상을 따라 하면 버릇까지 베어 오는 경향이 있다.',
-    dmem:'표현형 복제 모델로 운용.' },
-];
-
-const wish = [
-  { id:379, name:'레지스틸', types:['강철'], sprite: OA+'379.png',
-    desc:'옛날 사람에 의해 봉인된 포켓몬.',
-    memo:'과거에 인간을 도와주었지만 그 힘에 공포를 느낀 고대인들에 의해 봉인되었다. 그 몸은 지구에 존재하지 않는 것으로 추정되는 정체불명의 금속이며, 지하에서 수만년 동안 압축되어 최고의 강도를 지닌 동시에 상당한 탄성까지 존재한다고 한다. 다만 속은 텅 비어 있는 것 같다.' },
-  { id:801, name:'마기아나', types:['강철','페어리'], sprite: OA+'801.png',
-    desc:'500년 이상 전에 만들어진 인조 포켓몬.',
-    memo:'약 500년 전 과학자에 의해 만들어졌다. 기계장치로 된 몸은 그릇에 불과하며 소울하트라고 불리는 인조 영혼이 본체.  의식을 동조시켜 상대의 마음을 이해한다. 다른 포켓몬이 받는 상처나 고통을 느끼고 도와주기 위해 힘을 내는 듯하다. ' },
-  { id:150, name:'뮤츠', types:['에스퍼'], sprite: OA+'150.png',
-    desc:'한 과학자가 몇 년에 걸쳐 유전자의 연구를 계속한 결과 탄생했다.',
-    memo:'연구를 위해 유전자를 조합하는 과정에서 난폭한 포켓몬이 되어 버렸다. 인간은 과학의 힘으로 몸은 만들었지만 상냥한 마음을 만들 수는 없었다는 모양. 지금은 어딘가의 동굴 깊은 곳에서 잠자고 있다고 전해진다.' },
-];
-
-function getAll(){ return [...owned, ...wish]; }
-const isWishId = (id) => wish.some(w => w.id === id);
-
-
-function tSlug(t){
-  const m={'노말':'normal','불꽃':'fire','물':'water','전기':'electric','풀':'grass','얼음':'ice','격투':'fighting','독':'poison','땅':'ground','비행':'flying','에스퍼':'psychic','벌레':'bug','바위':'rock','고스트':'ghost','드래곤':'dragon','악':'dark','강철':'steel','페어리':'fairy','???':'unknown'};
-  return m[t]||'unknown';
-}
-
-
-const gridOwned=document.getElementById('grid-owned');
-const gridWish=document.getElementById('grid-wish');
-const tabInfo=document.getElementById('tab-info');
-const tabData=document.getElementById('tab-data');
-const panelInfo=document.getElementById('panel-info');
-const panelData=document.getElementById('panel-data');
-
-let selectedId=null;
-
-
-function makeSpriteImg(src, alt){
-  const img=new Image();
-  img.src=src; img.alt=alt;
-  img.style.maxWidth='100%'; img.style.maxHeight='100%';
-  img.style.imageRendering = (src.includes('/sprites/gen5/')) ? 'pixelated' : 'auto';
-  img.decoding='async'; img.loading='lazy';
-  img.onerror=()=>{ const p=img.parentElement; if(p){ p.textContent=alt.replace(' 스프라이트',''); } };
-  return img;
-}
-
-
-function renderGrid(container, arr, isWish=false){
-  container.innerHTML='';
-  arr.forEach(m=>{
-    const card=document.createElement('button');
-    card.type='button'; card.className='mon-card'+(isWish?' wish':'');
-    card.setAttribute('role','listitem'); card.setAttribute('aria-selected',String(m.id===selectedId));
-    card.addEventListener('click',()=>{ selectMon(m.id); playCryById(m.id); });
-
-    const sp=document.createElement('div'); sp.className='sprite';
-    if(m.sprite){ sp.appendChild(makeSpriteImg(m.sprite, `${m.name} 스프라이트`)); }
-    else sp.textContent=`NO.${String(m.id).padStart(3,'0')}`;
-
-    const meta=document.createElement('div'); meta.className='meta';
-    meta.innerHTML=`<div class="no">NO.${String(m.id).padStart(3,'0')}</div>
-                    <div class="name">${m.name}</div>
-                    <div class="types">${m.types.map(t=>`<span class="type t-${tSlug(t)}">${t}</span>`).join('')}</div>`;
-
-    card.appendChild(sp); card.appendChild(meta); container.appendChild(card);
-  });
-}
-function renderAll(){ renderGrid(gridOwned, owned, false); renderGrid(gridWish, wish, true); }
-
-
-function setTab(which){ const on=which==='info'; tabInfo.setAttribute('aria-selected',String(on)); tabData.setAttribute('aria-selected',String(!on)); panelInfo.hidden=!on; panelData.hidden=on; }
-tabInfo.addEventListener('click',()=>setTab('info')); tabData.addEventListener('click',()=>setTab('data'));
-
-
-function selectMon(id){
-  selectedId=id; renderAll();
-  const m=getAll().find(x=>x.id===id); if(!m) return;
-  const wished=isWishId(id);
-  tabData.disabled=wished;
-  if(wished) setTab('info');
-  renderInfo(m);
-  if(!wished) renderData(m);
-  if(window.updateHUDX) window.updateHUDX(m);
-}
-
-const $=id=>document.getElementById(id);
-function renderInfo(m){
-  $('info-name').textContent=m.name;
-  $('info-id').textContent=`NO.${String(m.id).padStart(3,'0')}`;
-  $('info-desc').textContent=m.desc||'—';
-  $('info-types').innerHTML=(m.types||[]).map(t=>`<span class="type t-${tSlug(t)}">${t}</span>`).join('');
-  const sp=$('info-sprite'); sp.textContent=''; sp.style.cursor='pointer';
-  if(m.sprite){ sp.appendChild(makeSpriteImg(m.sprite, `${m.name} 스프라이트`)); } else sp.textContent=m.name||'—';
-  sp.onclick=()=>playCryById(m.id);
-  $('info-extra').innerHTML = `<div class="placeholder">${m.memo?m.memo:'메모/추가 정보를 적을 공간'}</div>`;
-  setTab('info');
-}
-function renderData(m){
-  $('data-name').textContent=m.name;
-  $('data-id').textContent=`NO.${String(m.id).padStart(3,'0')}`;
-  $('data-met').textContent=m.met||'—';
-  $('data-person').textContent=m.personality||'—';
-  const sp=$('data-sprite'); sp.textContent='DATA'; sp.style.cursor='pointer';
-  if(m.sprite){ sp.textContent=''; sp.appendChild(makeSpriteImg(m.sprite, `${m.name} 스프라이트`)); }
-  sp.onclick=()=>playCryById(m.id);
-  $('data-extra').innerHTML = `<div class="placeholder">${m.dmem?m.dmem:'메모/추가 데이터를 적을 공간'}</div>`;
-}
-
-
-renderAll();
-
-
-(function(){
-  const el=document.getElementById('splash'); if(!el) return;
-  const bar=document.getElementById('sp-bar');
-  const pct=document.getElementById('sp-pct');
-  const stage=document.getElementById('sp-stage');
-  const log=document.getElementById('sp-log');
-  const STAGES=["INITIALIZING","AUTHENTICATING","OPENING POKÉMON BOX","DECRYPTING","INDEXING","VALIDATING","COMPILING","FINALIZING"];
-  const LOGS=["> Opening Pokémon Box…","> Scanning crates…","> Decrypting research data…","> Indexing specimen files…","> Syncing field notes…","> Consolidating metadata…"];
-  const start=performance.now(), D=4000;
-  (function step(t){
-    const p=Math.min(1,(t-start)/D), n=Math.round(p*100);
-    bar.style.width=n+"%"; pct.textContent=n+"%";
-    stage.textContent=STAGES[Math.min(STAGES.length-1,Math.floor(p*(STAGES.length)))];
-    if(n%13===0) log.textContent=LOGS[Math.floor(Math.random()*LOGS.length)];
-    if(p<1) requestAnimationFrame(step); else el.remove();
-  })(performance.now());
-})();
-</script>
-
-
-<script>
-(function(){
-  const cv=document.getElementById('hudx-cv'); if(!cv) return;
-  const ctx=cv.getContext('2d'); const DPR=Math.max(1,window.devicePixelRatio||1);
-  const idEl=document.getElementById('hudx-id');
-  const nameEl=document.getElementById('hudx-name');
-  const typesEl=document.getElementById('hudx-types');
-
- 
-  let SEED=1; function mulberry32(a){return function(){a|=0;a=(a+0x6D2B79F5)|0;let t=Math.imul(a^(a>>>15),1|a);t^=t+Math.imul(t^(t>>>7),61|t);return((t^(t>>>14))>>>0)/4294967296;};}
-  let rnd=mulberry32(SEED);
-  function reseedFrom(mon){
-    const id=mon?.id??0; let h=id*2654435761;
-    const s=(mon?.name||'')+(mon?.types||[]).join('|');
-    for(let i=0;i<s.length;i++) h=(h^s.charCodeAt(i))+((h<<5)|(h>>>27));
-    SEED=(h>>>0)||1; rnd=mulberry32(SEED); buildScene();
-  }
-
-  let BLIPS=[],PATH=[];
-  function buildScene(){
-    const n=7+Math.floor(rnd()*3); BLIPS=[];
-    for(let i=0;i<n;i++) BLIPS.push({a:rnd()*Math.PI*2,r:0.25+rnd()*0.65,sp:0.2+rnd()*0.8,pulse:rnd()*6});
-    const k=5+Math.floor(rnd()*3); PATH=[]; let ang=0;
-    for(let i=0;i<k;i++){ ang+=(Math.PI*2)/k+(rnd()-.5)*0.4; PATH.push({a:ang,r:0.35+rnd()*0.55}); }
-  }
-  buildScene();
-
-  function fit(){ const w=cv.clientWidth|0,h=cv.clientHeight|0; if(!w||!h){requestAnimationFrame(fit);return;}
-    cv.width=w*DPR; cv.height=h*DPR; ctx.setTransform(DPR,0,0,DPR,0,0); }
-  ('ResizeObserver' in window ? new ResizeObserver(fit) : window).observe?.(cv);
-  window.addEventListener('resize',fit); fit();
-
-  function ring(cx,cy,R,a=.45){ ctx.strokeStyle=`rgba(255,120,120,${a})`; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.stroke(); }
-  function sweep(cx,cy,R,t){ const a0=t*1.2,span=Math.PI/5; const g=ctx.createRadialGradient(cx,cy,R*.1,cx,cy,R);
-    g.addColorStop(0,'rgba(255,60,60,.18)'); g.addColorStop(1,'rgba(255,60,60,0)'); ctx.fillStyle=g; ctx.beginPath(); ctx.moveTo(cx,cy);
-    ctx.arc(cx,cy,R,a0,a0+span); ctx.closePath(); ctx.fill(); }
-  function polarToXY(cx,cy,R,a,r){ return [cx+Math.cos(a)*R*r, cy+Math.sin(a)*R*r]; }
-  function arrow(x1,y1,x2,y2){ ctx.strokeStyle='rgba(255,170,170,.7)'; ctx.lineWidth=1.2; ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
-    const ang=Math.atan2(y2-y1,x2-x1); ctx.beginPath(); ctx.moveTo(x2,y2);
-    ctx.lineTo(x2-Math.cos(ang-Math.PI/10)*8,y2-Math.sin(ang-Math.PI/10)*8);
-    ctx.lineTo(x2-Math.cos(ang+Math.PI/10)*8,y2-Math.sin(ang+Math.PI/10)*8); ctx.closePath(); ctx.fillStyle='rgba(255,170,170,.7)'; ctx.fill(); }
-  function terrainStrip(x,y,w,h,t,bias=0){ ctx.save(); ctx.beginPath(); ctx.rect(x,y,w,h); ctx.clip();
-    for(let i=0;i<w;i++){ const u=i/w;
-      const n=Math.sin((u*6+t*.5+bias)*3)*.4 + Math.sin((u*1.3+t*.3+bias*2)*5)*.2 + Math.sin((u*9.7+t*.9)*1.3)*.1;
-      const elev=(n*.5+.5); const py=y+h*(1-elev);
-      ctx.strokeStyle='rgba(255,110,110,.35)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(x+i,y+h); ctx.LineTo?0:ctx.lineTo(x+i,py); ctx.stroke();
-      if(i%3===0){ ctx.fillStyle='rgba(255,180,180,.25)'; ctx.fillRect(x+i,py-1,1,2); }
-    } ctx.restore(); }
-
-  function pokeBall(cx,cy,r,t){
-    ctx.save(); ctx.translate(cx,cy); ctx.rotate(t*.7);
-    ctx.strokeStyle='rgba(255,150,150,.7)'; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2); ctx.stroke();
-    ctx.lineWidth=1.6; ctx.strokeStyle='rgba(255,120,120,.65)'; ctx.beginPath(); ctx.moveTo(-r*0.85,0); ctx.lineTo(r*0.85,0); ctx.stroke();
-    ctx.fillStyle='rgba(255,200,200,.95)'; ctx.beginPath(); ctx.arc(0,0,r*0.18,0,Math.PI*2); ctx.fill();
-    ctx.strokeStyle='rgba(255,120,120,.8)'; ctx.beginPath(); ctx.arc(0,0,r*0.32,0,Math.PI*2); ctx.stroke();
-    ctx.strokeStyle='rgba(255,150,150,.5)'; for(let i=0;i<8;i++){ const a=i/8*Math.PI*2,len=(i%2?6:10);
-      ctx.beginPath(); ctx.moveTo(Math.cos(a)*(r-len),Math.sin(a)*(r-len)); ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r); ctx.stroke(); }
-    ctx.restore();
-  }
-  function label(text,x,y,align='left'){
-    ctx.save(); ctx.font='11px Galmuri11-Condensed, ui-monospace, monospace';
-    ctx.textAlign=align; ctx.textBaseline='middle';
-    ctx.shadowColor='rgba(255,60,60,.45)'; ctx.shadowBlur=8;
-    ctx.fillStyle='rgba(255,220,220,.95)'; ctx.fillText(text,x,y); ctx.restore();
-  }
-
-  let T=0,P=performance.now();
-  function loop(now){
-    const dt=Math.min(100,now-P)/1000; P=now; T+=dt;
-    const w=cv.width/DPR, h=cv.height/DPR;
-    ctx.clearRect(0,0,w,h);
-
-    const CX=Math.floor(w*0.33), CY=Math.floor(h*0.58), R=Math.min(h*.75,w*.40,120);
-    [1,.82,.64,.46,.30].forEach(k=>ring(CX,CY,R*k,k===1?.45:.22));
-    ctx.strokeStyle='rgba(255,120,120,.35)'; ctx.beginPath(); ctx.moveTo(CX-R,CY); ctx.lineTo(CX+R,CY); ctx.moveTo(CX,CY-R); ctx.lineTo(CX,CY+R); ctx.stroke();
-    sweep(CX,CY,R,T);
-
-    ctx.strokeStyle='rgba(255,170,170,.5)'; ctx.lineWidth=1.2;
-    for(let i=0;i<PATH.length-1;i++){ const p=PATH[i],q=PATH[i+1];
-      const [x1,y1]=polarToXY(CX,CY,R,p.a,p.r); const [x2,y2]=polarToXY(CX,CY,R,q.a,q.r); arrow(x1,y1,x2,y2); }
-
-    BLIPS.forEach(b=>{ const dt2=0.016; b.a+=dt2*0.2;b.sp=b.sp; b.pulse+=dt2*2;
-      const [x,y]=polarToXY(CX,CY,R,b.a,b.r+Math.sin(T*0.7+b.a)*0.01);
-      ctx.fillStyle='rgba(255,220,220,.9)'; ctx.beginPath(); ctx.arc(x,y,2,0,Math.PI*2); ctx.fill();
-      ctx.strokeStyle='rgba(255,120,120,'+(0.5+0.5*Math.sin(b.pulse))+')'; ctx.beginPath(); ctx.arc(x,y,6+4*Math.sin(b.pulse),0,Math.PI*2); ctx.stroke(); });
-
-    pokeBall(w-42,24,16,T);
-
-    terrainStrip(Math.floor(w*0.48), Math.floor(h-38), Math.floor(w*0.48),28,T*0.6,(SEED%97)/31);
-
-    const coordX=((Math.sin(T*.35+SEED)*50+128.0)).toFixed(1);
-    const coordY=((Math.cos(T*.42+SEED)*50-64.0)).toFixed(1);
-    label(`COORD  X:${coordX}  Y:${coordY}`,12,32,'left');
-
-    label((nameEl.textContent&&nameEl.textContent!=='—')?nameEl.textContent:'SCANNING…',CX,CY,'center');
-    label('SCAN ϟ TERRAIN / PATH',12,h-12,'left');
-    label('ALT~',w-50,h-12,'right');
-
-    requestAnimationFrame(loop);
-  }
-  requestAnimationFrame(loop);
-
-  function syncOverlay(){
-    const no=(document.getElementById('info-id')?.textContent||'NO.—').trim();
-    const name=(document.getElementById('info-name')?.textContent||'—').trim();
-    const tbox=document.getElementById('info-types');
-    const types=tbox?Array.from(tbox.querySelectorAll('*')).map(n=>n.textContent.trim()).filter(Boolean):[];
-    idEl.textContent=no||'NO.—';
-    nameEl.textContent=name||'—';
-    typesEl.innerHTML=types.map(t=>`<span class="hudx-chip">${t}</span>`).join('');
-  }
-  const mo=new MutationObserver(syncOverlay);
-  mo.observe(document.getElementById('panel-info'),{subtree:true,childList:true,characterData:true});
-  syncOverlay();
-
-  window.updateHUDX=function(mon){ syncOverlay(); reseedFrom(mon); };
-})();
-</script>
+  (function(){
+    const el=document.getElementById('splash');
+    const bar=document.getElementById('sp-bar');
+    const pct=document.getElementById('sp-pct');
+    const stage=document.getElementById('sp-stage');
+    const log=document.getElementById('sp-log');
+    const STAGES=["INITIALIZING","AUTHENTICATING","OPENING POKÉMON BOX","DECRYPTING","INDEXING","VALIDATING","COMPILING","FINALIZING"];
+    const LOGS=["> Opening Pokémon Box…","> Scanning crates…","> Decrypting research data…","> Indexing specimen files…","> Syncing field notes…","> Consolidating metadata…"];
+    const start=performance.now(), D=4000;
+    (function step(t){
+      const p=Math.min(1,(t-start)/D), n=Math.round(p*100);
+      bar.style.width=n+"%"; pct.textContent=n+"%";
+      stage.textContent=STAGES[Math.min(STAGES.length-1,Math.floor(p*(STAGES.length)))];
+      if(n%13===0) log.textContent=LOGS[Math.floor(Math.random()*LOGS.length)];
+      if(p<1) requestAnimationFrame(step); else el.remove();
+    })(performance.now());
+  })();
+  </script>
 </body>
 </html>

@@ -20,95 +20,97 @@
   *{box-sizing:border-box} html,body{height:100%}
   body{margin:0;background:var(--bg);color:var(--txt);font-family:var(--font);line-height:1.6;font-size:14px}
 
-  /* === SPLASH (로딩창: 디자인/문구 1:1) === */
-  #splash{
-    position:fixed; inset:0; z-index:9999; background:#000;
-    display:grid; place-items:center; font-family:var(--font);
-  }
-  .sp-frame{
-    width:min(920px,96vw);
-    border:2px solid #F25555; border-radius:14px; padding:18px; background:#000;
-    box-shadow:0 0 22px rgba(0,0,0,.5), inset 0 0 20px rgba(0,0,0,.35);
-  }
-  .sp-brand{
-    font-size:26px; color:#F25555; text-align:center;
-    text-shadow:0 0 8px rgba(242,85,85,.45), 0 0 14px rgba(255,210,210,.25);
-  }
-  .sp-sub{
-    color:#E08A8A; text-align:center; margin:4px 0 10px;
-    animation:softBlink 7s steps(30,end) infinite;
-    font-size:13px;
-  }
-  .sp-hud{
-    display:flex; gap:12px; justify-content:space-between; flex-wrap:wrap;
-    border:2px solid #F25555; border-radius:10px; padding:8px 10px; margin:8px 0 12px;
-    color:#ffdcdc; font-size:12px;
-  }
-  .sp-panel{ border:2px solid #F25555; border-radius:12px; padding:14px; }
-  .sp-stage{ font-size:24px; text-align:center; color:#F25555; }
-  .sp-pct{ color:#E08A8A; text-align:center; margin-bottom:6px; font-size:13px;}
-  .sp-meter{ height:14px; border:2px solid #F25555; border-radius:10px; overflow:hidden; }
-  .sp-meter>i{ display:block; height:100%; width:0%; background:linear-gradient(90deg,#E04B4B,#F25555); }
-  .sp-log{
-    font-size:13px; background:#000; border:1px dashed rgba(242,85,85,.35);
-    border-radius:10px; padding:10px; min-height:70px; color:#ffdcdc;
-    animation:crtFlicker 4.5s steps(40,end) infinite;
-  }
-  .sp-log::after{ content:"▎"; margin-left:6px; color:#ffdcdc; animation:softBlink 1.2s steps(2,end) infinite; }
+  /* === SPLASH (기존 디자인 유지) === */
+  #splash{position:fixed; inset:0; z-index:9999; background:#000; display:grid; place-items:center; font-family:var(--font)}
+  .sp-frame{width:min(920px,96vw); border:2px solid #F25555; border-radius:14px; padding:18px; background:#000; box-shadow:0 0 22px rgba(0,0,0,.5), inset 0 0 20px rgba(0,0,0,.35)}
+  .sp-brand{font-size:40px; color:#F25555; text-align:center; text-shadow:0 0 8px rgba(242,85,85,.45), 0 0 14px rgba(255,210,210,.25)}
+  .sp-sub{color:#E08A8A; text-align:center; margin:4px 0 10px; animation:softBlink 7s steps(30,end) infinite; font-size:13px}
+  .sp-hud{display:flex; gap:12px; justify-content:space-between; flex-wrap:wrap; border:2px solid #F25555; border-radius:10px; padding:8px 10px; margin:8px 0 12px; color:#ffdcdc; font-size:12px}
+  .sp-panel{border:2px solid #F25555; border-radius:12px; padding:14px}
+  .sp-stage{font-size:24px; text-align:center; color:#F25555}
+  .sp-pct{color:#E08A8A; text-align:center; margin-bottom:6px; font-size:13px}
+  .sp-meter{height:14px; border:2px solid #F25555; border-radius:10px; overflow:hidden}
+  .sp-meter>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,#E04B4B,#F25555)}
+  .sp-log{font-size:13px; background:#000; border:1px dashed rgba(242,85,85,.35); border-radius:10px; padding:10px; min-height:70px; color:#ffdcdc; animation:crtFlicker 4.5s steps(40,end) infinite}
+  .sp-log::after{content:"▎"; margin-left:6px; color:#ffdcdc; animation:softBlink 1.2s steps(2,end) infinite}
+  @keyframes softBlink{0%,92%,100%{opacity:1;filter:brightness(1)} 94%{opacity:.92;filter:brightness(.98)} 96%{opacity:.85;filter:brightness(.96)} 98%{opacity:.95;filter:brightness(.99)}}
+  @keyframes crtFlicker{0%{opacity:.96;filter:saturate(1)} 50%{opacity:.93;filter:saturate(1.03)} 100%{opacity:.96;filter:saturate(1)}}
 
-  @keyframes softBlink{
-    0%,92%,100%{opacity:1;filter:brightness(1)}
-    94%{opacity:.92;filter:brightness(.98)}
-    96%{opacity:.85;filter:brightness(.96)}
-    98%{opacity:.95;filter:brightness(.99)}
-  }
-  @keyframes crtFlicker{
-    0%{opacity:.96;filter:saturate(1)}
-    50%{opacity:.93;filter:saturate(1.03)}
-    100%{opacity:.96;filter:saturate(1)}
-  }
-
-  /* ===== 기본 UI ===== */
+  /* ===== 상단 ===== */
   header{position:sticky;top:0;z-index:10;background:linear-gradient(#19080b,#120508);border-bottom:1px solid var(--red2);padding:8px 12px;box-shadow:inset 0 -2px 0 0 #000}
   .top{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
-  h1{margin:0;color:#fff;font-size:16px}
+  h1{margin:0;color:#fff;font-size:16px;letter-spacing:.25px}
   nav{display:flex;gap:8px}
-  .btn{appearance:none;border:1px solid var(--red2);background:linear-gradient(#16060a,#100408);color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:12px;text-decoration:none}
+  .btn{appearance:none;border:1px solid var(--red2);background:linear-gradient(#16060a,#100408);color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:12px;text-decoration:none;box-shadow:inset 0 0 0 2px #000}
+  .btn:hover{filter:brightness(1.06)}
 
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:16px;display:grid;gap:16px}
-  .section{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:inset 0 0 0 2px #000}
-  .sec-title{margin:0 0 10px;font-size:16px;color:#fff;display:flex;align-items:center;gap:8px}
+  /* ===== 레이아웃 & 카드 ===== */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:16px;display:grid;gap:18px}
+  .section{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:14px 14px 16px;box-shadow:inset 0 0 0 2px #000}
+  .sec-title{margin:0 0 12px;font-size:15px;color:#fff;display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:1px dashed #252831}
   .pb{width:14px;height:14px;border-radius:50%;position:relative;display:inline-block;background:linear-gradient(#e33 0 50%,#fff 50% 100%);border:1px solid #000}
   .pb::before{content:"";position:absolute;left:-1px;right:-1px;top:calc(50% - 1px);height:2px;background:#000}
   .pb::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:6px;height:6px;background:#bbb;border:2px solid #000;border-radius:50%}
 
-  .grid-p{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:start}
+  .grid-p{display:grid;grid-template-columns:140px 1fr;gap:14px;align-items:start}
   @media(max-width:720px){.grid-p{grid-template-columns:1fr}}
-  .avatar{width:100%;height:120px;border:1px solid var(--line);border-radius:12px;background:#07080a;display:grid;place-items:center;overflow:hidden}
+  .avatar{width:100%;aspect-ratio:1/1;border:1px solid var(--line);border-radius:12px;background:#07080a;display:grid;place-items:center;overflow:hidden;box-shadow:inset 0 0 0 2px #000}
   .avatar img{width:100%;height:100%;object-fit:cover}
-  .pill{display:inline-flex;gap:6px;align-items:center;padding:2px 6px;border:1px solid rgba(255,120,120,.5);background:rgba(255,47,62,.12);border-radius:999px;font-size:11px;color:#ffd7dc;width:max-content}
+  .pill{display:inline-flex;gap:6px;align-items:center;padding:3px 8px 4px;border:1px solid rgba(255,120,120,.5);background:rgba(255,47,62,.12);border-radius:999px;font-size:11px;color:#ffd7dc;width:max-content;box-shadow:inset 0 0 0 2px #000}
 
-  .grid-s{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
-  @media(max-width:860px){.grid-s{grid-template-columns:1fr}}
-  .card{border:1px solid var(--line);border-radius:12px;background:#0b0d12;padding:12px}
-  .dialog{position:relative;padding:12px 14px 14px;background:linear-gradient(180deg,#101217,#0b0d12);border:2px solid #e9ecef;border-radius:0;box-shadow:inset 0 0 0 2px #000,0 0 0 2px #000;font-size:14px}
-  .dialog[data-speaker]::before{content:attr(data-speaker);position:absolute;top:-12px;left:12px;font-size:11px;color:#000;background:#e9ecef;border:2px solid #000;border-radius:6px;padding:0 6px;line-height:16px;height:16px}
+  .grid-s{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}
+  @media(max-width:900px){.grid-s{grid-template-columns:1fr}}
+  .grid-e{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:860px){.grid-e{grid-template-columns:1fr}}
+
+  .card{border:1px solid var(--line);border-radius:12px;background:#0b0d12;padding:12px;box-shadow:inset 0 0 0 2px #000}
+  .card h3{margin:0 0 8px}
+
+  /* === 대사창(각진/얇은 테두리) === */
+  .dialog{position:relative;padding:12px 14px 14px;background:linear-gradient(180deg,#101217,#0b0d12);border:1.5px solid #e9ecef;border-radius:0;box-shadow:inset 0 0 0 2px #000,0 0 0 2px #000;font-size:14px;letter-spacing:.2px}
+  .dialog[data-speaker]::before{content:attr(data-speaker);position:absolute;top:-11px;left:12px;font-size:11px;color:#000;background:#e9ecef;border:2px solid #000;border-radius:6px;padding:0 6px;line-height:16px;height:16px}
   .dialog .tri{position:absolute;right:10px;bottom:8px;font-size:14px;line-height:1;color:#ff2f3e}
+
+  /* === 타입칩 미세 정렬 === */
+  .chipset{display:flex;gap:6px 8px;flex-wrap:wrap}
+  .type{font-size:10px;padding:0 6px;line-height:1.4;display:inline-flex;align-items:center;justify-content:center;border:1px solid #303643;background:#0c0e12;color:#eaeaea;border-radius:999px}
+  .t-normal{background:#A8A77A;color:#111;border-color:#8a8b5f}
+  .t-ghost{background:#735797;color:#fff;border-color:#5c467a}
+
+  /* === 포켓몬 프레임 === */
+  .spec{display:grid;grid-template-rows:240px auto;gap:10px}
+  .spec-fig{position:relative;border:1px solid #22272f;border-radius:12px;background:#06070a;display:grid;place-items:center;overflow:hidden;box-shadow:inset 0 0 0 2px #000}
+  .spec-fig::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
+  .spec-fig img{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
+
+  /* === 재생 버튼(캡슐 + 이퀄라이저) === */
+  .music-wrap{margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .music-btn{
+    appearance:none; cursor:pointer; position:relative;
+    display:inline-flex; align-items:center; gap:8px;
+    padding:6px 14px; border-radius:999px;
+    border:1px solid rgba(255,120,120,.55);
+    background:linear-gradient(180deg, rgba(255,47,62,.18), rgba(255,47,62,.10));
+    color:#ffd7dc; font-size:12px; letter-spacing:.2px;
+    box-shadow:inset 0 0 0 2px #000, 0 0 14px rgba(255,47,62,.10);
+  }
+  .music-btn svg{width:14px;height:14px;fill:currentColor}
+  .music-btn .eq{display:inline-grid;grid-auto-flow:column;gap:2px}
+  .music-btn .eq i{display:block;width:2px;height:10px;background:currentColor;border-radius:1px;opacity:.8}
+  .music-btn[aria-pressed="true"] .eq i:nth-child(1){animation:eq1 .8s linear infinite}
+  .music-btn[aria-pressed="true"] .eq i:nth-child(2){animation:eq2 .8s linear infinite}
+  .music-btn[aria-pressed="true"] .eq i:nth-child(3){animation:eq3 .8s linear infinite}
+  @keyframes eq1{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+  @keyframes eq2{0%,100%{transform:scaleY(.7)}50%{transform:scaleY(.3)}}
+  @keyframes eq3{0%,100%{transform:scaleY(.5)}50%{transform:scaleY(1)}}
+
+  /* === 리스트 가독성 === */
+  ul{margin:6px 0 0 16px}
+  li{margin:4px 0}
   .choices{display:grid;gap:10px;margin-top:10px}
   .choice{display:flex;gap:8px;align-items:flex-start}
   .choice .arrow{color:#ff616d;font-size:14px;line-height:1.4}
   .choices-intro{margin:2px 0 2px;color:var(--mut);font-size:13px}
-
-  .spec{display:grid;grid-template-rows:220px auto;gap:8px}
-  .spec-fig{position:relative;border:1px solid #22272f;border-radius:12px;background:#06070a;display:grid;place-items:center;overflow:hidden}
-  .spec-fig::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
-  .spec-fig img{max-width:100%;max-height:100%;object-fit:contain}
-  .chipset{display:flex;gap:6px 8px;flex-wrap:wrap}
-  .type{font-size:10px;padding:0 6px;line-height:1.3;border:1px solid #303643;background:#0c0e12;color:#eaeaea;border-radius:999px}
-  .t-normal{background:#A8A77A;color:#111;border-color:#8a8b5f}.t-ghost{background:#735797;color:#fff;border-color:#5c467a}
-
-  .grid-e{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  @media(max-width:860px){.grid-e{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -146,10 +148,28 @@
   <section class="section">
     <h2 class="sec-title"><span class="pb"></span>WHITE / 29 (BW)</h2>
     <div class="grid-p">
-      <div class="avatar"><img src="OP.png" alt="연구원 화이트 사진" onerror="this.onerror=null;this.src='pp.png'"></div>
+      <div>
+        <div class="avatar">
+          <img src="www.png" alt="연구원 화이트 사진" onerror="this.onerror=null;this.src='pp.png'">
+        </div>
+
+        <!-- 재생 버튼 -->
+        <div class="music-wrap">
+          <button id="music-btn" type="button" class="music-btn" aria-pressed="false" aria-controls="bgm" title="배경음악 재생/일시정지">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            <span>재생</span>
+            <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+          </button>
+        </div>
+        <audio id="bgm" preload="none">
+          <source src="mt-moon.mp3" type="audio/mpeg">
+          <source src="mt-moon.ogg" type="audio/ogg">
+        </audio>
+      </div>
+
       <div>
         <span class="pill">RESEARCHER • BLACK CITY</span>
-        <div class="card" style="margin-top:8px">
+        <div class="card" style="margin-top:10px">
           <h3>개요</h3>
           <ul>
             <li>블랙 버전에만 출연한다 – 플레이어에게 조로아를 선물해주고 떠나는 단역.</li>
@@ -180,6 +200,7 @@
           <div class="choice"><span class="arrow">›</span><div><b>거절한다</b><br>플레이어의 뒤를 몰래 따라다니기 시작. 포켓몬과의 교류를 관찰하는 모습을 보인다</div></div>
         </div>
       </div>
+
       <div class="card spec">
         <div class="spec-fig">
           <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/571-hisui.png" alt="히스이 조로아크" onerror="this.onerror=null;this.src='i.png'">
@@ -213,7 +234,7 @@
   </section>
 </main>
 
-<!-- 로딩 스크립트 (게이지 + 문구 동일/글씨 은은 깜빡임) -->
+<!-- 로딩 스크립트 (동일) -->
 <script>
 (function(){
   const el=document.getElementById('splash'); if(!el) return;
@@ -222,31 +243,43 @@
   const stage=document.getElementById('sp-stage');
   const log=document.getElementById('sp-log');
 
-  const STAGES=[
-    "INITIALIZING","AUTHENTICATING","OPENING POKÉMON BOX",
-    "DECRYPTING","INDEXING","VALIDATING","COMPILING","FINALIZING","READY"
-  ];
-  const LOGS=[
-    "> Opening Pokémon Box…",
-    "> Scanning crates…",
-    "> Decrypting research data…",
-    "> Indexing specimen files…",
-    "> Syncing field notes…",
-    "> Consolidating metadata…"
-  ];
+  const STAGES=["INITIALIZING","AUTHENTICATING","OPENING POKÉMON BOX","DECRYPTING","INDEXING","VALIDATING","COMPILING","FINALIZING","READY"];
+  const LOGS=["> Opening Pokémon Box…","> Scanning crates…","> Decrypting research data…","> Indexing specimen files…","> Syncing field notes…","> Consolidating metadata…"];
 
-  const D=4000; // 총 로딩 시간 (ms)
-  const start=performance.now();
+  const D=4000; const start=performance.now();
   (function step(t){
-    const p=Math.min(1,(t-start)/D);
-    const n=Math.round(p*100);
-    bar.style.width=n+"%";
-    pct.textContent=n+"%";
+    const p=Math.min(1,(t-start)/D); const n=Math.round(p*100);
+    bar.style.width=n+"%"; pct.textContent=n+"%";
     stage.textContent=STAGES[Math.min(STAGES.length-1, Math.floor(p*(STAGES.length)))];
     if(n%13===0) log.textContent = LOGS[Math.floor(Math.random()*LOGS.length)];
-    if(p<1) requestAnimationFrame(step);
-    else el.remove();
+    if(p<1) requestAnimationFrame(step); else el.remove();
   })(performance.now());
+})();
+
+/* === 음악 토글 (아이콘/텍스트 상태 반영 + 박자바 애니메이션) === */
+(function(){
+  const btn=document.getElementById('music-btn');
+  const audio=document.getElementById('bgm');
+  if(!btn||!audio) return;
+
+  let playing=false;
+  const iconPlay = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+  const iconPause = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>';
+
+  function setState(on){
+    playing=on;
+    btn.setAttribute('aria-pressed', on?'true':'false');
+    btn.innerHTML = (on?iconPause:iconPlay) + '<span>' + (on?'일시정지':'재생') + '</span><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>';
+  }
+  setState(false);
+
+  btn.addEventListener('click', async ()=>{
+    try{
+      if(!playing){ await audio.play(); setState(true); }
+      else { audio.pause(); setState(false); }
+    }catch(e){ alert('음원 파일(mt-moon.mp3 또는 mt-moon.ogg)을 이 파일과 같은 폴더에 넣어주세요.'); }
+  });
+  audio.addEventListener('ended', ()=> setState(false));
 })();
 </script>
 </body>
